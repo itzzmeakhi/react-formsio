@@ -4,28 +4,33 @@ import { useFormsio } from 'react-formsio';
 import 'react-formsio/dist/index.css';
 
 const App = () => {
-    const [ Form , register ] = useFormsio();
+    // const INITIAL_STATE = {
+    //     userName: '',
+    //     userEmail: ''
+    // };
+    const [ refs, register ] = useFormsio();
+    console.log(refs);
     return(
-        <Form>
+        <form>
 
             <input
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
-                validations = { register() } />
+                ref={ register({ name: 'userName', validations: 'required|minLength:5', initialValue: 'Akhil' }) } />
 
             <input
                 type = 'email'
                 placeholder = 'Enter your email'
                 name = 'userEmail'
-                ref = { register } />
+                ref = { register({ name: 'userEmail' }) } />
 
             <button
                 type = 'submit'>
                     Submit
             </button>
 
-        </Form>
+        </form>
     )
 }
 
