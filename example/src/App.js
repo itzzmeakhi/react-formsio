@@ -17,7 +17,7 @@ const App = () => {
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
-                ref={ register({ name: 'userName', validations: 'required|minLength:5', initialValue: 'Akhil' }) } />
+                ref={ register({ name: 'userName', validations: 'required|minLength:5:11|equalTo:10', initialValue: 'Akhil' }) } />
 
             <input
                 type = 'email'

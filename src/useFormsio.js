@@ -24,12 +24,12 @@ const useFormsio = () => {
         }
     }, []);
     
-    //////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
 
     // Method that takes validator string as input.
     // And composes them to an Array of objects (i.e., Validation Rules)
 
-    //////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
 
     const composeValidations = ( validationStr ) => {
         if(!validationStr) return;
@@ -46,16 +46,18 @@ const useFormsio = () => {
                                                 .push(
                                                     { 
                                                         validation: keyAfterSlicing[0], 
-                                                        message: `${invalidArgs}` }
+                                                        message: `${invalidArgs}` 
+                                                    }
                                                 );
                                             return false;
-                                        } 
-                                        if(acceptedValidators[keyAfterSlicing[0]] === -1) {
+                                        }
+                                        if(acceptedValidators[keyAfterSlicing[0]] === undefined) {
                                             validationEntryErrors
                                                 .push(
                                                     { 
                                                         validation: keyAfterSlicing[0], 
-                                                        message: `${invalidRule}` }
+                                                        message: `${invalidRule}` 
+                                                    }
                                                 );
                                             return false;
                                         }
