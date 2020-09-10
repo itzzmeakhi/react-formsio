@@ -8,8 +8,8 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ refs, register ] = useFormsio();
-    console.log(refs);
+    const [ register ] = useFormsio();
+
     return(
         <form>
 

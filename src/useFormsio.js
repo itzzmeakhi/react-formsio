@@ -1,5 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
+import acceptedValidators from './shared/utils/acceptedValidators';
+
 
 
 const useFormsio = () => {
@@ -7,56 +9,86 @@ const useFormsio = () => {
     const [ formState, setFormState ] = useState({});
     const refs = useRef({});
     const initialValues = {};
+    const validationEntryErrors = [];
     const validationRules = {};
 
     const register = useCallback(( fieldArgs ) => ref => {
         if(fieldArgs) {
             const { name, validations, initialValue } = fieldArgs;
-
-            validations && composeValidations(validations);
+            if(validations) { validationRules[name] = composeValidations(validations); }
 
             validationRules[name] = validations ? validations : [];
             initialValues[name] = initialValue ? initialValue : '';
     
             refs.current[name] = ref;
-
-            // if(fieldArgs) {
-            //     fieldState = {...fieldArgs};
-            // }
         }
     }, []);
+    
+    //////////////////////////////////////////////////////////////////
+
+    // Method that takes validator string as input.
+    // And composes them to an Array of objects (i.e., Validation Rules)
+
+    //////////////////////////////////////////////////////////////////
 
     const composeValidations = ( validationStr ) => {
-        if(validationStr) {
-            const validationStrKeys = validationStr.split('|');
-            console.log(validationStrKeys);
-        }
+        if(!validationStr) return;
+        const invalidArgs = 'Invalid arguements for the validation rule. Please refer the documentation.';
+        const invalidRule = 'Invalid validation rule. Please refer the documentation, for supported rules';
+        const validationRules = validationStr
+                                    .split('|')
+                                    .map(key => {
+                                        return key.includes(':') ? key.split(':') : [key, true];
+                                    })
+                                    .filter(keyAfterSlicing => {
+                                        if(keyAfterSlicing.length > 2) { 
+                                            validationEntryErrors 
+                                                .push(
+                                                    { 
+                                                        validation: keyAfterSlicing[0], 
+                                                        message: `${invalidArgs}` }
+                                                );
+                                            return false;
+                                        } 
+                                        if(acceptedValidators[keyAfterSlicing[0]] === -1) {
+                                            validationEntryErrors
+                                                .push(
+                                                    { 
+                                                        validation: keyAfterSlicing[0], 
+                                                        message: `${invalidRule}` }
+                                                );
+                                            return false;
+                                        }
+                                        return true;
+                                    })
+                                    .map(filteredKey => {
+                                        return { [filteredKey[0]]: filteredKey[1] }
+                                    });
+        return validationRules;
     }
 
-    useEffect(() => {
-        const refsKeys = Object.keys(refs.current);
-        refsKeys.forEach(refKey => {
-            if(!formState[refKey]) {
-                console.log(initialValues);
-                console.log(validationRules);
-                setFormState(prevState => {
-                    return {
-                        ...prevState,
-                        [refKey]: {
-                            value: '',
-                            touched: false,
-                            untouched: true,
-                            pristine: true,
-                            dirty: false
-                        }
-                    }
-                });
-            }
-        });
-    }, [ refs ]);
+    // useEffect(() => {
+    //     const refsKeys = Object.keys(refs.current);
+    //     refsKeys.forEach(refKey => {
+    //         if(!formState[refKey]) {
+    //             setFormState(prevState => {
+    //                 return {
+    //                     ...prevState,
+    //                     [refKey]: {
+    //                         value: '',
+    //                         touched: false,
+    //                         untouched: true,
+    //                         pristine: true,
+    //                         dirty: false
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }, [ refs ]);
 
     useEffect(() => {
-        console.log(formState)
+        //console.log(formState)
     }, [ formState ]);
 
 
@@ -76,7 +108,7 @@ const useFormsio = () => {
     //     });
     // }, [fieldState])
 
-    return [ refs, register ];
+    return [ register ];
 };
 
 export { useFormsio };
