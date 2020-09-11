@@ -33,6 +33,13 @@ const useFormsio = () => {
         });
     }
 
+    //////////////////////////////////////////
+
+    // Method to handle onclick event
+    // Updates the state, based on the value
+
+    //////////////////////////////////////////
+
     const handleClick = event => {
         const { name } = event.target;
         setFormState(prevState => {
@@ -125,46 +132,28 @@ const useFormsio = () => {
         const refsKeys = Object.keys(refs.current);
         refsKeys.forEach(refKey => {
             refs.current[refKey].value = initialValues[refKey];
-            refs.current[refKey].onclick = handleClick;
             refs.current[refKey].oninput = handleChange;
+            refs.current[refKey].onclick = handleClick;
             if(!formState[refKey]) {
+                const validityBasedOnValidations = validationRules[refKey].length > 0;
                 setFormState(prevState => {
                     return {
                         ...prevState,
                         [refKey]: {
                             value: initialValues[refKey],
-                            touched: false,
                             untouched: true,
+                            touched: false,
                             pristine: true,
-                            dirty: false
+                            valid: validityBasedOnValidations ? false : true,
+                            invalid: validityBasedOnValidations ? true : false,
+                            dirty: false,
+                            errors: {}
                         }
                     }
                 });
             }
         });
     }, []);
-
-    // useEffect(() => {
-    //     //console.log(formState)
-    // }, [ formState ]);
-
-
-
-    // useEffect(() => {
-    //     setFormState(prevState => {
-    //         return{
-    //             ...prevState,
-    //             [fieldState.name]: {
-    //                 value: '',
-    //                 touched: false,
-    //                 untouched: true,
-    //                 pristine: true,
-    //                 dirty: false
-    //             }
-    //         }
-    //     });
-    // }, [fieldState])
-
     return [ register, formState ];
 };
 

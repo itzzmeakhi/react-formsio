@@ -3,6 +3,8 @@ import React from 'react'
 import { useFormsio } from 'react-formsio';
 import 'react-formsio/dist/index.css';
 
+import './App.css';
+
 const App = () => {
     // const INITIAL_STATE = {
     //     userName: '',
