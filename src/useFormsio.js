@@ -33,6 +33,21 @@ const useFormsio = () => {
         });
     }
 
+    const handleClick = event => {
+        const { name } = event.target;
+        setFormState(prevState => {
+            const fieldValues = { ...prevState[name] };
+            return {
+                ...prevState,
+                [name]: {
+                    ...fieldValues,
+                    touched: fieldValues.touched ? fieldValues.touched : !fieldValues.touched,
+                    untouched: fieldValues.untouched ? !fieldValues.untouched : fieldValues.untouched
+                }
+            }
+        });
+    }
+
     useEffect(() => {
         console.log(formState);
     }, [ formState ]);
@@ -109,7 +124,8 @@ const useFormsio = () => {
         //console.log('Effect');
         const refsKeys = Object.keys(refs.current);
         refsKeys.forEach(refKey => {
-            refs.current[refKey].value = initialValues[refKey]
+            refs.current[refKey].value = initialValues[refKey];
+            refs.current[refKey].onclick = handleClick;
             refs.current[refKey].oninput = handleChange;
             if(!formState[refKey]) {
                 setFormState(prevState => {
