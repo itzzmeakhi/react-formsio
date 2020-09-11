@@ -9,6 +9,7 @@ const App = () => {
     //     userEmail: ''
     // };
     const [ register ] = useFormsio();
+    console.log('Component');
 
     return(
         <form>
@@ -34,4 +35,4 @@ const App = () => {
     )
 }
 
-export default App;
+export default React.memo(App);

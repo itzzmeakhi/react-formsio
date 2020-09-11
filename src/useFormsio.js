@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 import acceptedValidators from './shared/utils/acceptedValidators';
 
@@ -12,15 +12,30 @@ const useFormsio = () => {
     const validationEntryErrors = [];
     const validationRules = {};
 
-    const register = useCallback(( fieldArgs ) => ref => {
-        if(fieldArgs) {
-            const { name, validations, initialValue } = fieldArgs;
-            if(validations) { validationRules[name] = composeValidations(validations); }
+    const handleChange = event => {
+        const { name, value } = event.target;
+        setFormState(prevState => {
+            return {
+                ...prevState,
+                [name]: value
+            }
+        })
+    }
 
-            validationRules[name] = validations ? validations : [];
+    ///////////////////////////////////////////////////////
+
+    // Method that binds the reference with input element.
+
+    ///////////////////////////////////////////////////////
+
+    const register = useCallback(( fieldArgs ) => ref => {
+        if(fieldArgs && refs.current[fieldArgs.name] === undefined) {
+            const { name, validations, initialValue } = fieldArgs;
+            validationRules[name] = validations ? composeValidations(validations) : [];
             initialValues[name] = initialValue ? initialValue : '';
-    
             refs.current[name] = ref;
+
+            console.log('Register');
         }
     }, []);
     
@@ -69,29 +84,36 @@ const useFormsio = () => {
         return validationRules;
     }
 
-    // useEffect(() => {
-    //     const refsKeys = Object.keys(refs.current);
-    //     refsKeys.forEach(refKey => {
-    //         if(!formState[refKey]) {
-    //             setFormState(prevState => {
-    //                 return {
-    //                     ...prevState,
-    //                     [refKey]: {
-    //                         value: '',
-    //                         touched: false,
-    //                         untouched: true,
-    //                         pristine: true,
-    //                         dirty: false
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }, [ refs ]);
+    ///////////////////////////////////////////
+
+    // Method that sets the initial form state.
+
+    ///////////////////////////////////////////
 
     useEffect(() => {
-        //console.log(formState)
-    }, [ formState ]);
+        console.log('Effect');
+        const refsKeys = Object.keys(refs.current);
+        refsKeys.forEach(refKey => {
+            if(!formState[refKey]) {
+                setFormState(prevState => {
+                    return {
+                        ...prevState,
+                        [refKey]: {
+                            value: '',
+                            touched: false,
+                            untouched: true,
+                            pristine: true,
+                            dirty: false
+                        }
+                    }
+                });
+            }
+        });
+    }, []);
+
+    // useEffect(() => {
+    //     //console.log(formState)
+    // }, [ formState ]);
 
 
 

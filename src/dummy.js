@@ -1,17 +1,41 @@
-        //     console.log(validationStrKeys);
-            
-        //     validationStrKeys.filter(key => {
-        //         if(key.includes(':')) {
-        //             const keySlices = key.split(':');
-        //             if(keySlices.length > 2 && acceptedValidations(keySlices[0] === -1)) {
-        //                 validationEntryErrors.push({ validation: keySlices[0], message: 'Please check the documentation for defining validation rules' });
-        //                 return false;
-        //             } 
-        //             return { [keySlices[0]]: keySlices[1] };
-        //         } else {
-        //             if(!acceptedValidations(key) === -1) {
+import React, { useState } from 'react';
 
-        //             }
-        //         }
-        //     })
-        // }
+const useForm = () => {
+
+    const [ formState, setFormState ] = useState({});
+    const refs = useRef({});
+
+    const register = useCallback(( fieldArgs ) => ref => {
+        if(fieldArgs) {
+            const { name, validations, initialValue } = fieldArgs;
+    
+            refs.current[name] = ref;
+        }
+        console.log('Register rendered');
+    }, []);
+
+    // useEffect(() => {
+    //     console.log('Effect Rendered');
+    //     const refsKeys = Object.keys(refs.current);
+    //     refsKeys.forEach(refKey => {
+    //         if(!formState[refKey]) {
+    //             setFormState(prevState => {
+    //                 return {
+    //                     ...prevState,
+    //                     [refKey]: {
+    //                         value: '',
+    //                         touched: false,
+    //                         untouched: true,
+    //                         pristine: true,
+    //                         dirty: false
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }, [ refs ]);
+
+    return [ register ];
+}
+
+export { useForm };
