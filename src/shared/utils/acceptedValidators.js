@@ -6,7 +6,7 @@ const acceptedValidators = {
     'minLength': true,
     'validMobile': true,
     'validbirthDate': true,
-    'passwordStrengt': true
+    'passwordStrength': true
 };
 
 export default acceptedValidators;

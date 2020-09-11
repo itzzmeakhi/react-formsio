@@ -38,6 +38,16 @@ const validators = ( fieldValue, validationsToBeDone ) => {
         }
     }
 
+    // Validation rule for PATTERN
+
+    if(validationsToPerform.pattern && fieldValue) {
+        console.log(validationsToPerform.pattern);
+        const regexPattern = new RegExp(validationsToPerform.pattern);
+        if(!regexPattern.test(fieldValue)) {
+            errorsOccurred.pattern = true;
+        }
+    }
+
     return errorsOccurred;
 }
 

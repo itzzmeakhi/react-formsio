@@ -21,14 +21,21 @@ const App = () => {
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
-                ref={ register({ name: 'userName', validations: 'required|minLength:5' }) }
+                ref = { register({ 
+                                    name: 'userName', 
+                                    validations: 'required|minLength:5', 
+                                    regexValidations: { pattern: /^[789]\d{9}$/ } 
+                                }) }
                 autoComplete = 'off' />
 
             <input
                 type = 'email'
                 placeholder = 'Enter your email'
                 name = 'userEmail'
-                ref = { register({ name: 'userEmail', validations: 'email' }) }
+                ref = { register({  
+                                    name: 'userEmail', 
+                                    validations: 'email' 
+                                }) }
                 autoComplete = 'off' />
 
             <button

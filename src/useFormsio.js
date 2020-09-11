@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-
 import { validators } from './shared/utils/validators';
-
 import acceptedValidators from './shared/utils/acceptedValidators';
 
 const useFormsio = () => {
@@ -10,6 +8,7 @@ const useFormsio = () => {
     const refs = useRef({});
     const initialValues = {};
     const validationEntryErrors = [];
+   
     const validationRules = {};
 
     //////////////////////////////////////////
@@ -72,11 +71,10 @@ const useFormsio = () => {
 
     const register = useCallback(( fieldArgs ) => ref => {
         if(fieldArgs && refs.current[fieldArgs.name] === undefined) {
-            const { name, validations, initialValue } = fieldArgs;
-            validationRules[name] = validations ? composeValidations(validations) : [];
+            const { name, validations, initialValue, regexValidations } = fieldArgs;
+            validationRules[name] = validations ? composeValidations(validations, regexValidations) : [];
             initialValues[name] = initialValue ? initialValue : '';
             refs.current[name] = ref;
-
             //console.log('Register');
         }
     }, []);
@@ -88,7 +86,7 @@ const useFormsio = () => {
 
     /////////////////////////////////////////////////////////////////////
 
-    const composeValidations = ( validationStr ) => {
+    const composeValidations = ( validationStr, regexValidations ) => {
         if(!validationStr) return;
         const invalidArgs = 'Invalid arguements for the validation rule. Please refer the documentation.';
         const invalidRule = 'Invalid validation rule. Please refer the documentation, for supported rules';
@@ -123,6 +121,18 @@ const useFormsio = () => {
                                     .map(filteredKey => {
                                         return { [filteredKey[0]]: filteredKey[1] }
                                     });
+        if(regexValidations) {
+            Object.keys(regexValidations).map(rgxVdtrKey => {
+                if(acceptedValidators[rgxVdtrKey] === undefined) {
+                    validationEntryErrors.push({
+                        validation: rgxVdtrKey,
+                        message: `${invalidRule}`
+                    });
+                } else {
+                    validationRules.push({ [rgxVdtrKey]: regexValidations[rgxVdtrKey] })
+                }
+            });
+        }
         return validationRules;
     }
 
