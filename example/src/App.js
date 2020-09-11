@@ -8,8 +8,9 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ register ] = useFormsio();
-    console.log('Component');
+    const [ register, formState ] = useFormsio();
+    //console.log('Component');
+    console.log(formState);
 
     return(
         <form>
@@ -18,13 +19,15 @@ const App = () => {
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
-                ref={ register({ name: 'userName', validations: 'required|minLength:5:11|equalTo:10', initialValue: 'Akhil' }) } />
+                ref={ register({ name: 'userName', validations: 'required|minLength:5' }) }
+                autoComplete = 'off' />
 
             <input
                 type = 'email'
                 placeholder = 'Enter your email'
                 name = 'userEmail'
-                ref = { register({ name: 'userEmail' }) } />
+                ref = { register({ name: 'userEmail' }) }
+                autoComplete = 'off' />
 
             <button
                 type = 'submit'>

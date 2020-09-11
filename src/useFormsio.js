@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 import acceptedValidators from './shared/utils/acceptedValidators';
 
-
-
 const useFormsio = () => {
 
     const [ formState, setFormState ] = useState({});
@@ -12,15 +10,29 @@ const useFormsio = () => {
     const validationEntryErrors = [];
     const validationRules = {};
 
+    //////////////////////////////////////////
+
+    // Method to handle change (oninput) event
+    // Updates the state, based on the value
+    
+    //////////////////////////////////////////
+
     const handleChange = event => {
         const { name, value } = event.target;
         setFormState(prevState => {
             return {
                 ...prevState,
-                [name]: value
+                [name]: {
+                    ...prevState[name],
+                    value: value
+                }
             }
-        })
+        });
     }
+
+    useEffect(() => {
+        console.log(formState);
+    }, [ formState ]);
 
     ///////////////////////////////////////////////////////
 
@@ -35,7 +47,7 @@ const useFormsio = () => {
             initialValues[name] = initialValue ? initialValue : '';
             refs.current[name] = ref;
 
-            console.log('Register');
+            //console.log('Register');
         }
     }, []);
     
@@ -91,15 +103,17 @@ const useFormsio = () => {
     ///////////////////////////////////////////
 
     useEffect(() => {
-        console.log('Effect');
+        //console.log('Effect');
         const refsKeys = Object.keys(refs.current);
         refsKeys.forEach(refKey => {
+            refs.current[refKey].value = initialValues[refKey]
+            refs.current[refKey].oninput = handleChange;
             if(!formState[refKey]) {
                 setFormState(prevState => {
                     return {
                         ...prevState,
                         [refKey]: {
-                            value: '',
+                            value: initialValues[refKey],
                             touched: false,
                             untouched: true,
                             pristine: true,
@@ -132,7 +146,7 @@ const useFormsio = () => {
     //     });
     // }, [fieldState])
 
-    return [ register ];
+    return [ register, formState ];
 };
 
 export { useFormsio };
