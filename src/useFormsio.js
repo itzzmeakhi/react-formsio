@@ -14,17 +14,20 @@ const useFormsio = () => {
 
     // Method to handle change (oninput) event
     // Updates the state, based on the value
-    
+
     //////////////////////////////////////////
 
     const handleChange = event => {
         const { name, value } = event.target;
         setFormState(prevState => {
+            const fieldValues = { ...prevState[name] };
             return {
                 ...prevState,
                 [name]: {
-                    ...prevState[name],
-                    value: value
+                    ...fieldValues,
+                    value: value,
+                    pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
+                    dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty
                 }
             }
         });
