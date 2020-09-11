@@ -45,7 +45,7 @@ const useFormsio = () => {
 
     //////////////////////////////////////////
 
-    const handleClick = event => {
+    const handleFocus = event => {
         const { name } = event.target;
         setFormState(prevState => {
             const fieldValues = { ...prevState[name] };
@@ -138,7 +138,7 @@ const useFormsio = () => {
         refsKeys.forEach(refKey => {
             refs.current[refKey].value = initialValues[refKey];
             refs.current[refKey].oninput = handleChange;
-            refs.current[refKey].onclick = handleClick;
+            refs.current[refKey].onfocus = handleFocus;
             if(!formState[refKey]) {
                 const validityBasedOnValidations = validationRules[refKey].length > 0;
                 setFormState(prevState => {

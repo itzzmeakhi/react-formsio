@@ -28,7 +28,7 @@ const App = () => {
                 type = 'email'
                 placeholder = 'Enter your email'
                 name = 'userEmail'
-                ref = { register({ name: 'userEmail' }) }
+                ref = { register({ name: 'userEmail', validations: 'email' }) }
                 autoComplete = 'off' />
 
             <button
