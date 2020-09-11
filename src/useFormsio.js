@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
+import { validators } from './shared/utils/validators';
+
 import acceptedValidators from './shared/utils/acceptedValidators';
 
 const useFormsio = () => {
@@ -18,19 +20,22 @@ const useFormsio = () => {
     //////////////////////////////////////////
 
     const handleChange = event => {
-        const { name, value } = event.target;
-        setFormState(prevState => {
-            const fieldValues = { ...prevState[name] };
-            return {
-                ...prevState,
-                [name]: {
-                    ...fieldValues,
-                    value: value,
-                    pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
-                    dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty
+        const { name, value, type } = event.target;
+        if(type === 'text' || type === 'password' || type === 'email') {
+            setFormState(prevState => {
+                const fieldValues = { ...prevState[name] };
+                return {
+                    ...prevState,
+                    [name]: {
+                        ...fieldValues,
+                        value: value,
+                        pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
+                        dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty,
+                        errors: validators(value, validationRules[name])
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     //////////////////////////////////////////
@@ -56,7 +61,7 @@ const useFormsio = () => {
     }
 
     useEffect(() => {
-        console.log(formState);
+        // console.log(formState);
     }, [ formState ]);
 
     ///////////////////////////////////////////////////////
