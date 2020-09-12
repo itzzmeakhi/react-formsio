@@ -1,15 +1,23 @@
 import { acceptedValidators, regexAcceptedValidators } from './acceptedValidators';
 
+//////////////////////////////////////////////////////
+
 // Method that checks for the presence of operators
 // And slices the string based on the operator passed
+
+//////////////////////////////////////////////////////
 
 export const splitAString = (validatorString, op) => {
     return validatorString.split(op);
 }
 
+/////////////////////////////////////////////////////
+
 // Method that removes the invalid validation rules
 // Also removes the rule with invalid arguments
 // And splits the string based on the passed
+
+////////////////////////////////////////////////////
 
 export const removeInvalidAndSplit = (validatorStringArray, op) => {
     const validatorsAfterRemoval = validatorStringArray
@@ -23,9 +31,13 @@ export const removeInvalidAndSplit = (validatorStringArray, op) => {
     return validatorsAfterRemoval;
 } 
 
+//////////////////////////////////////////////////////
+
 // Method that removes the duplicate validation rules
 // It keeps the last inputted validation rule
 // And omits all duplicates
+
+/////////////////////////////////////////////////////
 
 export const removeDuplicates = (validatorStringArray) => {
     const keysLength = validatorStringArray.length;
@@ -47,7 +59,24 @@ export const checkValuesValidity = (validatorStringArray) => {
         if(item[0] === 'email') return item[1] === true ? true : false;
         if(item[0] === 'maxLength') return Number.isInteger(Number(item[1])) ? true : false;
         if(item[0] === 'minLength') return Number.isInteger(Number(item[1])) ? true : false;
+        if(item[0] === 'pattern') return (item[1] instanceof RegExp) ? true : false;
         return true;
+    });
+}
+
+export const mapRegexValidators = (regexValidators) => {
+    const regexValidatorKeys = Object.keys(regexValidators);
+    return regexValidatorKeys
+            .filter(key => {
+                return regexAcceptedValidators[key] === undefined ? false : true;
+            }).map(key => {
+                return [key, regexValidators[key]];
+            });
+}
+
+export const mapArrayToObj = (validatorArray) => {
+    return validatorArray.map(key => {
+        return { [key[0]]: key[1] };
     });
 }
 

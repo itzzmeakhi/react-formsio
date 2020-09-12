@@ -1,7 +1,14 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { splitAString, removeDuplicates, removeInvalidAndSplit, checkValuesValidity } from './shared/utils/validatorParseMethods';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { 
+            splitAString, 
+            removeDuplicates, 
+            removeInvalidAndSplit, 
+            checkValuesValidity,
+            mapRegexValidators,
+            mapArrayToObj 
+        } from './shared/utils/validatorParseMethods';
 import { validators } from './shared/utils/validators';
-import  { acceptedValidators } from './shared/utils/acceptedValidators';
+import { regexAcceptedValidators } from './shared/utils/acceptedValidators';
 
 const useFormsio = () => {
 
@@ -70,8 +77,8 @@ const useFormsio = () => {
 
     const register = useCallback(( fieldArgs ) => ref => {
         if(fieldArgs && refs.current[fieldArgs.name] === undefined) {
-            const { name, validations, initialValue, regexValidations } = fieldArgs;
-            validationRules[name] = validations ? composeValidations(validations, regexValidations) : [];
+            const { name, validators, initialValue, regexValidators } = fieldArgs;
+            validationRules[name] = validators || regexValidators ? composeValidators(validators, regexValidators) : {};
             initialValues[name] = initialValue ? initialValue : '';
             refs.current[name] = ref;
             //console.log('Register');
@@ -85,37 +92,22 @@ const useFormsio = () => {
 
     /////////////////////////////////////////////////////////////////////
 
-    const composeValidations = ( validationStr, regexValidations ) => {
-        if(!validationStr) return;
-        const validationRulesSplitArray = removeInvalidAndSplit(splitAString(validationStr, '|'), ':');
-        const validationRulesArray = checkValuesValidity(removeDuplicates(validationRulesSplitArray));
-        console.log(validationRulesArray);
-
-        // if(regexValidations) {
-        //     Object.keys(regexValidations).map(rgxVdtrKey => {
-        //         if(acceptedValidators[rgxVdtrKey] === undefined) {
-        //             validationEntryErrors.push({
-        //                 validation: rgxVdtrKey,
-        //                 message: `${invalidRule}`
-        //             });
-        //         } else {
-        //             if(validationRules[rgxVdtrKey]) {
-        //                 delete validationRules.rgxVdtrKey;
-        //                 validationEntryErrors
-        //                     .push(
-        //                         {
-        //                             validation: rgxVdtrKey,
-        //                             message: 'Validation declared multiple times.'
-        //                         }
-        //                     )
-        //             } else {
-        //                 validationRules.push({ [rgxVdtrKey]: regexValidations[rgxVdtrKey] });
-        //             }
-        //         }
-        //     });
-        // }
-        console.log(validationRules);
-        return validationRules;
+    const composeValidators = ( validatorStr, regexValidators ) => {
+        if(!validatorStr && !regexValidators) return;
+        let validatorRules = [];
+        let regexValidatorRules = [];
+        if(validatorStr) {
+            const validatorRulesSplitArray = removeInvalidAndSplit(splitAString(validatorStr, '|'), ':');
+            validatorRules = mapArrayToObj(checkValuesValidity(removeDuplicates(validatorRulesSplitArray)));
+        } else {
+            validatorRules = [];
+        }
+        if(regexValidators) {
+            regexValidatorRules = mapArrayToObj(checkValuesValidity(mapRegexValidators(regexValidators)));
+        } else {
+            regexValidatorRules = [];
+        }
+        return Object.assign({}, ...validatorRules.concat(regexValidatorRules));
     }
 
     ///////////////////////////////////////////
@@ -132,7 +124,7 @@ const useFormsio = () => {
             refs.current[refKey].oninput = handleChange;
             refs.current[refKey].onfocus = handleFocus;
             if(!formState[refKey]) {
-                const validityBasedOnValidations = validationRules[refKey].length > 0;
+                const validityBasedOnValidators = Object.keys(validationRules[refKey]).length > 0;
                 setFormState(prevState => {
                     return {
                         ...prevState,
@@ -141,8 +133,8 @@ const useFormsio = () => {
                             untouched: true,
                             touched: false,
                             pristine: true,
-                            valid: validityBasedOnValidations ? false : true,
-                            invalid: validityBasedOnValidations ? true : false,
+                            valid: validityBasedOnValidators ? false : true,
+                            invalid: validityBasedOnValidators ? true : false,
                             dirty: false,
                             errors: {}
                         }

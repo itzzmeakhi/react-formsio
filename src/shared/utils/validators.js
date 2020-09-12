@@ -1,12 +1,10 @@
-const validators = ( fieldValue, validationsToBeDone ) => {
+const validators = ( fieldValue, validationsToPerform ) => {
 
     const errorsOccurred = {};
     const phoneRegex = /^[6789]\d{9}$/;
     const emailRegex = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     const actualLength = String(fieldValue).length;
-    
-    // Convert Array of objects to Object of objects
-    const validationsToPerform = Object.assign({}, ...validationsToBeDone);
+
     // console.log(validationsToPerform);
 
     // Validation rule for REQUIRED
