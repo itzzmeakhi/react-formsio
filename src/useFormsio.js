@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { splitAString, removeDuplicates, removeInvalidAndSplit, checkValuesValidity } from './shared/utils/validatorParseMethods';
 import { validators } from './shared/utils/validators';
-import acceptedValidators from './shared/utils/acceptedValidators';
+import  { acceptedValidators } from './shared/utils/acceptedValidators';
 
 const useFormsio = () => {
 
     const [ formState, setFormState ] = useState({});
     const refs = useRef({});
     const initialValues = {};
-    const validationEntryErrors = [];
-   
     const validationRules = {};
 
     //////////////////////////////////////////
@@ -88,51 +87,34 @@ const useFormsio = () => {
 
     const composeValidations = ( validationStr, regexValidations ) => {
         if(!validationStr) return;
-        const invalidArgs = 'Invalid arguements for the validation rule. Please refer the documentation.';
-        const invalidRule = 'Invalid validation rule. Please refer the documentation, for supported rules';
-        const validationRules = validationStr
-                                    .split('|')
-                                    .map(key => {
-                                        return key.includes(':') ? key.split(':') : [key, true];
-                                    })
-                                    .filter(keyAfterSlicing => {
-                                        if(keyAfterSlicing.length > 2) { 
-                                            validationEntryErrors 
-                                                .push(
-                                                    { 
-                                                        validation: keyAfterSlicing[0], 
-                                                        message: `${invalidArgs}` 
-                                                    }
-                                                );
-                                            return false;
-                                        }
-                                        if(acceptedValidators[keyAfterSlicing[0]] === undefined) {
-                                            validationEntryErrors
-                                                .push(
-                                                    { 
-                                                        validation: keyAfterSlicing[0], 
-                                                        message: `${invalidRule}` 
-                                                    }
-                                                );
-                                            return false;
-                                        }
-                                        return true;
-                                    })
-                                    .map(filteredKey => {
-                                        return { [filteredKey[0]]: filteredKey[1] }
-                                    });
-        if(regexValidations) {
-            Object.keys(regexValidations).map(rgxVdtrKey => {
-                if(acceptedValidators[rgxVdtrKey] === undefined) {
-                    validationEntryErrors.push({
-                        validation: rgxVdtrKey,
-                        message: `${invalidRule}`
-                    });
-                } else {
-                    validationRules.push({ [rgxVdtrKey]: regexValidations[rgxVdtrKey] })
-                }
-            });
-        }
+        const validationRulesSplitArray = removeInvalidAndSplit(splitAString(validationStr, '|'), ':');
+        const validationRulesArray = checkValuesValidity(removeDuplicates(validationRulesSplitArray));
+        console.log(validationRulesArray);
+
+        // if(regexValidations) {
+        //     Object.keys(regexValidations).map(rgxVdtrKey => {
+        //         if(acceptedValidators[rgxVdtrKey] === undefined) {
+        //             validationEntryErrors.push({
+        //                 validation: rgxVdtrKey,
+        //                 message: `${invalidRule}`
+        //             });
+        //         } else {
+        //             if(validationRules[rgxVdtrKey]) {
+        //                 delete validationRules.rgxVdtrKey;
+        //                 validationEntryErrors
+        //                     .push(
+        //                         {
+        //                             validation: rgxVdtrKey,
+        //                             message: 'Validation declared multiple times.'
+        //                         }
+        //                     )
+        //             } else {
+        //                 validationRules.push({ [rgxVdtrKey]: regexValidations[rgxVdtrKey] });
+        //             }
+        //         }
+        //     });
+        // }
+        console.log(validationRules);
         return validationRules;
     }
 

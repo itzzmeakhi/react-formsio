@@ -23,7 +23,7 @@ const App = () => {
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validations: 'required|minLength:5', 
+                                    validations: 'pattern:false|required|pattern|minLength:5|pattern:false|minLength:1', 
                                     regexValidations: { pattern: /^[789]\d{9}$/ } 
                                 }) }
                 autoComplete = 'off' />

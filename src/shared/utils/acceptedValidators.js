@@ -1,12 +1,16 @@
 const acceptedValidators = {
-    'required': true,
-    'email': true,
-    'pattern': true,
-    'maxLength': true,
-    'minLength': true,
-    'validMobile': true,
-    'validbirthDate': true,
-    'passwordStrength': true
+    required: true,
+    email: true,
+    maxLength: true,
+    minLength: true
 };
 
-export default acceptedValidators;
+const regexAcceptedValidators = {
+    pattern: true,
+    validMobile: true,
+    validbirthDate: true,
+    passwordStrength: true
+}
+
+
+export { acceptedValidators, regexAcceptedValidators };

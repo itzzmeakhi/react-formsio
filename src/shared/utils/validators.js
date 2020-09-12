@@ -1,6 +1,7 @@
 const validators = ( fieldValue, validationsToBeDone ) => {
 
     const errorsOccurred = {};
+    const phoneRegex = /^[6789]\d{9}$/;
     const emailRegex = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     const actualLength = String(fieldValue).length;
     
@@ -41,11 +42,16 @@ const validators = ( fieldValue, validationsToBeDone ) => {
     // Validation rule for PATTERN
 
     if(validationsToPerform.pattern && fieldValue) {
-        console.log(validationsToPerform.pattern);
         const regexPattern = new RegExp(validationsToPerform.pattern);
         if(!regexPattern.test(fieldValue)) {
             errorsOccurred.pattern = true;
         }
+    }
+
+    // Validation rule for VALIDMOBILE
+
+    if(validationsToPerform.validMobile && fieldValue) {
+
     }
 
     return errorsOccurred;
