@@ -7,7 +7,7 @@ import {
             mapRegexValidators,
             mapArrayToObj 
         } from './shared/utils/validatorParseMethods';
-import { validators } from './shared/utils/validators';
+import { validations } from './shared/utils/validations';
 
 const useFormsio = () => {
 
@@ -41,7 +41,7 @@ const useFormsio = () => {
                         value: value,
                         pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
                         dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty,
-                        errors: validators(value, validationRules.current[name])
+                        errors: validations(value, validationRules.current[name])
                     }
                 }
             });
