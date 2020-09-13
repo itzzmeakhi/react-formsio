@@ -17,15 +17,15 @@ const App = () => {
 
     return(
         <form>
-
+            {/* validators: 'required|minLength:6:8|required:false|xxx:0|minLength:e|minLength:9|maxLength:8' */}
             <input
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validators: 'required|minLength:6:8|required:false|xxx:0|minLength:e|minLength:9|maxLength:8', 
-                                    regexValidators: { validMobile: /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/ , zenz: 'mm'  } 
+                                    validators: 'required|maxLength:6', 
+                                    regexValidators: { pattern: /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/, validMobile: /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/, zenz: 'mm'  } 
                                 }) }
                 autoComplete = 'off' />
 
@@ -35,7 +35,18 @@ const App = () => {
                 name = 'userEmail'
                 ref = { register({  
                                     name: 'userEmail', 
-                                    validators: 'email' 
+                                    validators: 'required|email' 
+                                }) }
+                autoComplete = 'off' />
+
+            <input
+                type = 'text'
+                placeholder = 'Tell us your DOB'
+                name = 'userDOB'
+                ref = { register({
+                                    name: 'userDOB',
+                                    validators: 'required',
+                                    regexValidators: { validBirthDate: true }
                                 }) }
                 autoComplete = 'off' />
 

@@ -8,7 +8,7 @@ const acceptedValidators = {
 const regexAcceptedValidators = {
     pattern: true,
     validMobile: true,
-    validbirthDate: true,
+    validBirthDate: true,
     passwordStrength: true
 }
 

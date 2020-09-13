@@ -14,8 +14,8 @@ const useFormsio = () => {
     const [ formState, setFormState ] = useState({});
     const refs = useRef({});
     const formStateRef = useRef({});
-    const initialValues = {};
     const validationRules = useRef({});
+    const initialValues = {};
 
     //////////////////////////////////////////
 

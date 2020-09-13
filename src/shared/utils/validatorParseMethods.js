@@ -21,7 +21,7 @@ export const splitAString = (validatorString, op) => {
 
 export const removeInvalidAndSplit = (validatorStringArray, op) => {
     const validatorsAfterRemoval = validatorStringArray
-                                    .map(key => key.includes(':') ? key.split(':') : [key, true])
+                                    .map(key => key.includes(op) ? key.split(':') : [key, true])
                                     .filter(keyArray => {
                                         if(acceptedValidators[keyArray[0]] === undefined 
                                             || keyArray.length > 2) {
@@ -69,10 +69,20 @@ export const checkValuesValidity = (validatorStringArray) => {
         if(item[0] === 'maxLength') return Number.isInteger(Number(item[1])) ? true : false;
         if(item[0] === 'minLength') return Number.isInteger(Number(item[1])) ? true : false;
         if(item[0] === 'pattern') return (item[1] instanceof RegExp) ? true : false;
-        if(item[0] === 'validMobile' || item[0] === 'validbirthDate' || item[0] === 'passwordStrength') {
+        if(item[0] === 'validMobile' || item[0] === 'passwordStrength') {
             if(item[1] instanceof RegExp) return true;
             if(item[1] === true) return true;
             return false;
+        }
+        if(item[0] === 'validBirthDate') {
+            if(item[1] === true) return true;
+            if(typeof item[1] === 'string'
+                && item[1].split('-').length === 3
+                && item[1].length === 10
+                && item[1].includes('mm')
+                && item[1].includes('dd')
+                && item[1].includes('yyyy')
+                && item[1].includes('-')) return true;
         }
     });
 }
