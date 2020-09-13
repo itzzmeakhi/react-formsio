@@ -23,7 +23,8 @@ export const removeInvalidAndSplit = (validatorStringArray, op) => {
     const validatorsAfterRemoval = validatorStringArray
                                     .map(key => key.includes(':') ? key.split(':') : [key, true])
                                     .filter(keyArray => {
-                                        if(acceptedValidators[keyArray[0]] === undefined || keyArray.length > 2) {
+                                        if(acceptedValidators[keyArray[0]] === undefined 
+                                            || keyArray.length > 2) {
                                             return false;
                                         }
                                         return true;
@@ -43,15 +44,23 @@ export const removeDuplicates = (validatorStringArray) => {
     const keysLength = validatorStringArray.length;
     return validatorStringArray.filter((key, index) => {
         const keyFieldValue = key[0];
-        for(let i=index+1; i<keysLength; i++) {
-            const iteratedFieldValue  = validatorStringArray[i][0];
-            if(iteratedFieldValue.includes(keyFieldValue) || keyFieldValue.includes(iteratedFieldValue)) {
+        for(let itr=index+1; itr<keysLength; itr++) {
+            const iteratedFieldValue = validatorStringArray[itr][0];
+            if(iteratedFieldValue.includes(keyFieldValue) 
+                || keyFieldValue.includes(iteratedFieldValue)) {
                 return false;
             }
         }
         return true;
     });
 }
+
+////////////////////////////////////////////////////////////////
+
+// Method that checks the validity of args passed for each rule
+// Omits the rule with invalid or falsy args passed
+
+////////////////////////////////////////////////////////////////
 
 export const checkValuesValidity = (validatorStringArray) => {
     return validatorStringArray.filter(item => {
@@ -64,6 +73,13 @@ export const checkValuesValidity = (validatorStringArray) => {
     });
 }
 
+///////////////////////////////////////////////////////////////
+
+// Method that does basic check for accepted regex rule or not
+// Also map object of object to array of arrays
+
+//////////////////////////////////////////////////////////////
+
 export const mapRegexValidators = (regexValidators) => {
     const regexValidatorKeys = Object.keys(regexValidators);
     return regexValidatorKeys
@@ -73,6 +89,12 @@ export const mapRegexValidators = (regexValidators) => {
                 return [key, regexValidators[key]];
             });
 }
+
+///////////////////////////////////
+
+// Method converts array to object
+
+///////////////////////////////////
 
 export const mapArrayToObj = (validatorArray) => {
     return validatorArray.map(key => {

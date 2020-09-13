@@ -1,5 +1,5 @@
 const validators = ( fieldValue, validationsToPerform ) => {
-
+    console.log(validationsToPerform);
     const errorsOccurred = {};
     const phoneRegex = /^[6789]\d{9}$/;
     const emailRegex = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;

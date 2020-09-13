@@ -10,9 +10,10 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ register, formState ] = useFormsio();
+    const [ register, formState, validationRules ] = useFormsio();
     //console.log('Component');
     console.log(formState);
+    console.log(validationRules);
 
     return(
         <form>
@@ -23,7 +24,7 @@ const App = () => {
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validators: 'required|minLength:6', 
+                                    validators: 'required|minLength:6:8|required:false|xxx:0|minLength:e|minLength:9|minLength:8', 
                                     regexValidators: { pattern: /^[789]\d{9}$/, validMobile: /^[a-z]/, zenz: 'mm'  } 
                                 }) }
                 autoComplete = 'off' />
