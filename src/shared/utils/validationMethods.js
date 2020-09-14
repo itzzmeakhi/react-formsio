@@ -1,3 +1,5 @@
+import { splitAString } from './validatorParseMethods';
+
 export const testForCustomRegex = (regex, value) => {
     const regexPattern = new RegExp(regex);
     console.log(regexPattern);
@@ -57,3 +59,19 @@ export const testForValidDOB = (dobArr, dobPatternArr) => {
     }
     return validDate;
 }
+
+export const composeCustomPasswordRules = (rulesStr) => {
+    const rulesArr = [];
+    const acceptedRules = ['Lc', 'Uc', 'D', 'S', 'L'];
+    const rulesSplitArray = splitAString(rulesStr, '|');
+    rulesSplitArray.map(rule => {
+        const fieldvalues = splitAString(rule, ':');
+        if(fieldvalues.length === 2 
+            && acceptedRules.includes(fieldvalues[0])
+            && Number.isInteger(Number(fieldvalues[1]))) {
+                rulesArr.push({ key: fieldvalues[0], value: fieldvalues[1] });
+        }
+    });
+    return rulesArr;
+}
+

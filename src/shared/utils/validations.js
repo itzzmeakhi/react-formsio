@@ -4,6 +4,7 @@ import {
             testForMaxLength,
             testForMinLength,
             testForDOBInputType,
+            composeCustomPasswordRules,
             testForValidDOB 
         } from './validationMethods';
 
@@ -13,6 +14,7 @@ const validations = ( fieldValue, validationsToPerform ) => {
     const actualLength = String(fieldValue).length;
     const defaultMobileRegex = /^[6-9]\d{9}$/;
     const defaultDateRegex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    const defaultPasswordRegex = /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/;
 
     // console.log(validationsToPerform);
 
@@ -31,7 +33,7 @@ const validations = ( fieldValue, validationsToPerform ) => {
             errorsOccurred.email = true;
     }
 
-    // Validation rule for MAXLENGTH
+    // Validation rule for MAX LENGTH
 
     if(validationsToPerform.maxLength 
         && fieldValue 
@@ -42,7 +44,7 @@ const validations = ( fieldValue, validationsToPerform ) => {
             }
     } 
 
-    // Validation rule for MINLENGTH
+    // Validation rule for MIN LENGTH
 
     if(validationsToPerform.minLength 
         && fieldValue 
@@ -61,10 +63,9 @@ const validations = ( fieldValue, validationsToPerform ) => {
             errorsOccurred.pattern = true;
     }
 
-    // Validation rule for VALIDMOBILE
+    // Validation rule for VALID MOBILE
 
     if(validationsToPerform.validMobile && fieldValue) { 
-        console.log(Number.isInteger(Number(fieldValue)));
         if(validationsToPerform.validMobile === true 
             && (Number.isInteger(Number(fieldValue))
             || !testForRegex(defaultMobileRegex, fieldValue))) {
@@ -75,7 +76,7 @@ const validations = ( fieldValue, validationsToPerform ) => {
         }
     }
 
-    // Validation rule for VALIDBIRTHDATE
+    // Validation rule for VALID BIRTHDATE
 
     if(validationsToPerform.validBirthDate && fieldValue) {
         const fieldvalueArray = fieldValue.split('/');
@@ -103,6 +104,61 @@ const validations = ( fieldValue, validationsToPerform ) => {
                     errorsOccurred.validBirthDate = true;
             }
         }
+    }
+
+    // Validation rule for PASSWORD STRENGTH
+
+    if(validationsToPerform.passwordStrength 
+        && typeof(fieldValue) === 'string'
+        && fieldValue) {
+            //let upperCaseRegx = `^(.*[A-Z]){2}.*$`;
+            // N 8 Uc 2 Lc 3 Sy 1 Di 2
+            // let hasNumbers = false;
+            // let hasLowerCase = false;
+            // let hasUppercase = false;
+            // let hasSymbols = false;
+            // let hasMinimumLength = false;
+            let upperCaseRegx = '';
+            let lowerCaseRegex = '';
+            let digitsRegex = '';
+            let lengthRegex = '';
+            let symbolsRegex = '';
+            if(typeof(validationsToPerform.passwordStrength) === 'string') {
+                const filteredRegexRules = composeCustomPasswordRules(validationsToPerform.passwordStrength);
+                filteredRegexRules.map(regexRule => {
+                    if(regexRule.key === 'Uc') {
+                        upperCaseRegx = `^(.*[A-Z]){${regexRule.value}}.*$`;
+                    } else if(regexRule.key === 'Lc') {
+                        lowerCaseRegex = `^(.*[a-z]){${regexRule.value}}.*$`;
+                    }
+                });
+            } else if(validationsToPerform.passwordStrength === true) {
+                let hasUpperCase = testForRegex(/^(.*[A-Z]){2}.*$/, fieldValue);
+                let hasLowerCase = testForRegex(/^(.*[a-z]){3}.*$/, fieldValue);
+                let hasNumbers = testForRegex(/^(.*[0-9]){2}.*$/, fieldValue);
+                let hasSymbols = testForRegex(/^(.*[*!@#$&*]){1}.*$/, fieldValue);
+                let hasMinimumLength = testForMinLength(fieldValue.length, 8);
+                if(!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSymbols || !hasMinimumLength) {
+                    errorsOccurred.passwordStrength = {
+                        invalid: true,
+                        hasLowerCase,
+                        hasUpperCase,
+                        hasNumbers,
+                        hasSymbols,
+                        hasMinimumLength
+                    };
+                }
+            }
+
+            // const regexRulesArray = splitAString(validationsToPerform.passwordStrength, '|');
+            // const filteredRegexRules = regexRulesArray.filter(regexRule => {
+            //     const regexRulesSplit = splitAString(regexRule, ':');
+            //     return regexRulesSplit.length > 2 || regexRulesSplit.length < 2 ? false : true;
+            // }).map(key => {
+            //     const splitKey = splitAString(key, ':');
+            //     return { [splitKey[0]]: splitKey[1] }
+            // });
+            // console.log(filteredRegexRules);
     }
 
     return errorsOccurred;

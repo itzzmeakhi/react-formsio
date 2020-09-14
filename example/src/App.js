@@ -50,6 +50,17 @@ const App = () => {
                                 }) }
                 autoComplete = 'off' />
 
+            <input
+                type = 'password'
+                placeholder = 'Please provide a password'
+                name = 'userPassword'
+                ref = { register({
+                                    name: 'userPassword',
+                                    validators: 'required',
+                                    regexValidators: { passwordStrength: true }
+                                }) }
+                autoComplete = 'off' />
+
             <button
                 type = 'submit'>
                     Submit

@@ -69,10 +69,14 @@ export const checkValuesValidity = (validatorStringArray) => {
         if(item[0] === 'maxLength') return Number.isInteger(Number(item[1])) ? true : false;
         if(item[0] === 'minLength') return Number.isInteger(Number(item[1])) ? true : false;
         if(item[0] === 'pattern') return (item[1] instanceof RegExp) ? true : false;
-        if(item[0] === 'validMobile' || item[0] === 'passwordStrength') {
+        if(item[0] === 'validMobile') {
             if(item[1] instanceof RegExp) return true;
             if(item[1] === true) return true;
             return false;
+        }
+        if(item[0] === 'passwordStrength') {
+            if(item[1] === true) return true;
+            if(typeof(item[1]) === 'string') return true;
         }
         if(item[0] === 'validBirthDate') {
             if(item[1] === true) return true;

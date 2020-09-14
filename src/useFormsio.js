@@ -26,7 +26,7 @@ const useFormsio = () => {
 
     const handleChange = event => {
         const { name, value, type } = event.target;
-        if(type === 'text' || type === 'password' || type === 'email') {
+        if(type === 'text' || type === 'password' || type === 'email'|| type === 'number') {
             formStateRef.current[name] = {
                 ...formStateRef.current[name],
                 pristine: false,
