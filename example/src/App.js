@@ -18,14 +18,20 @@ const App = () => {
     return(
         <form>
             {/* validators: 'required|minLength:6:8|required:false|xxx:0|minLength:e|minLength:9|maxLength:8' */}
+            {/* pincode: ^[1-9][0-9]{5}$   ---- 111111 */}
+            {/* /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/   ----  (308)-135-7895 */}
+            {/* mm-dd-yyyy || dd-mm-yyyy || yyyy-mm-dd */}
             <input
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validators: 'required|maxLength:6', 
-                                    regexValidators: { pattern: /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/, validMobile: /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/, zenz: 'mm'  } 
+                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:10|zzz|minLength:8|required:false|maxLength:false', 
+                                    regexValidators: { 
+                                        pattern: /^[1-9][0-9]{5}$/, 
+                                        validMobile: /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/, 
+                                        zenz: 'mm'  } 
                                 }) }
                 autoComplete = 'off' />
 
@@ -46,7 +52,7 @@ const App = () => {
                 ref = { register({
                                     name: 'userDOB',
                                     validators: 'required',
-                                    regexValidators: { validBirthDate: true }
+                                    regexValidators: { validBirthDate: 'yyyy-mm-dd' }
                                 }) }
                 autoComplete = 'off' />
 

@@ -2,7 +2,6 @@ import { splitAString } from './validatorParseMethods';
 
 export const testForCustomRegex = (regex, value) => {
     const regexPattern = new RegExp(regex);
-    console.log(regexPattern);
     return regexPattern.test(value) ? true : false;
 }
 
@@ -25,53 +24,79 @@ export const testForDOBInputType = (dobArr) => {
     return truthyArray.length < 3 ? false : true;
 }
 
-export const testForValidDOB = (dobArr, dobPatternArr) => {
-    let birthDate = null;
-    let birthMonth = null;
-    let birthYear = null;
-    let validDate = false;
+export const testForValidDOB = (dobArr) => {
+    let birthDate = Number(dobArr[0]);
+    let birthMonth = Number(dobArr[1]);
+    let birthYear = Number(dobArr[2]);
+    let inValidDate = false;
     let isLeapyear = false;
     let month31 = [1, 3, 5, 7, 8, 10, 12];
     let month30 = [4, 6, 9, 11];
-    dobPatternArr.forEach((elem, index) => {
-        if(elem === 'mm') birthMonth = Number(dobArr[index]);
-        if(elem === 'dd') birthDate = Number(dobArr[index]);
-        if(elem === 'yyyy') birthYear = Number(dobArr[index]);
-    });
+
     if(birthYear >= 1950
-        && birthYear <= new Date().getFullYear()) {
+        && birthYear <= new Date().getFullYear()
+        && Number.isInteger(birthDate)
+        && Number.isInteger(birthMonth)
+        && Number.isInteger(birthYear)) {
             if(((birthYear % 4 == 0) && (birthYear % 100 != 0)) || (birthYear % 400 == 0)) {
                 isLeapyear = true;
             }
             if(birthYear === new Date().getFullYear()) {
                 if(birthDate > new Date().getDate() && birthMonth >= new Date().getMonth()+1) {
-                    validDate = true;
+                    inValidDate = true;
                 } else if(birthMonth > new Date().getMonth()+1) {
-                    validDate = true;
+                    inValidDate = true;
                 }
             }
-            if(month31.includes(birthMonth) && !birthDate >= 1 && !birthDate <= 31) invalidDate = true;
-            if(month30.includes(birthMonth) && !birthDate >= 1 && !birthDate <= 30) invalidDate = true;
-            if(birthMonth === 2 && isLeapyear && !birthDate >= 1 && !birthDate <= 29) invalidDate = true;
-            if(birthMonth === 2 && !isLeapyear && !birthDate >= 1 && !birthDate <= 28) invalidDate = true;
+            if(month31.includes(birthMonth)) { 
+                if(birthDate < 1 || birthDate > 31) inValidDate = true;
+            } else if(month30.includes(birthMonth)) {
+                if(birthDate < 1 || birthDate > 30) inValidDate = true;
+            } else if(birthMonth === 2 && isLeapyear) { 
+                if(birthDate < 1 || birthDate > 29) inValidDate = true;
+            } else if(birthMonth === 2 && !isLeapyear) {
+                if(birthDate < 1 || birthDate > 28) inValidDate = true;
+            } else {
+                inValidDate = true;
+            }
     } else {
-        validDate = true;
+        inValidDate = true;
     }
-    return validDate;
+    return inValidDate;
 }
 
-export const composeCustomPasswordRules = (rulesStr) => {
-    const rulesArr = [];
+export const composeRulesAndValidate = (rulesStr, val) => {
     const acceptedRules = ['Lc', 'Uc', 'D', 'S', 'L'];
     const rulesSplitArray = splitAString(rulesStr, '|');
-    rulesSplitArray.map(rule => {
+    
+    const validationResultArr = rulesSplitArray.map(rule => {
         const fieldvalues = splitAString(rule, ':');
         if(fieldvalues.length === 2 
             && acceptedRules.includes(fieldvalues[0])
             && Number.isInteger(Number(fieldvalues[1]))) {
-                rulesArr.push({ key: fieldvalues[0], value: fieldvalues[1] });
+                if(fieldvalues[0] === 'Uc') {
+                    return { 
+                        ['hasUpperCase']: testForRegex(new RegExp(`^(.*[A-Z]){${fieldvalues[1]}}.*$`), val)
+                    };
+                } else if(fieldvalues[0] === 'Lc') {
+                    return { 
+                        ['hasLowerCase']: testForRegex(new RegExp(`^(.*[a-z]){${fieldvalues[1]}}.*$`), val) 
+                    };
+                } else if(fieldvalues[0] === 'D') {
+                    return { 
+                        ['hasNumbers']: testForRegex(new RegExp(`^(.*[0-9]){${fieldvalues[1]}}.*$`), val) 
+                    };
+                } else if(fieldvalues[0] === 'S') {
+                    return { 
+                        ['hasSymbols']: testForRegex(new RegExp(`^(.*[*!@#$&*]){${fieldvalues[1]}}.*$`), val) 
+                    };
+                } else if(fieldvalues[0] === 'L') {
+                    return { 
+                        ['hasMinimumLength']: testForMinLength(val.length, Number(fieldvalues[1]))
+                    };
+                }
         }
     });
-    return rulesArr;
+    return Object.assign({}, ...validationResultArr);
 }
 
