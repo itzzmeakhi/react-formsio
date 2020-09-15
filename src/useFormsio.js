@@ -16,6 +16,18 @@ const useFormsio = () => {
     const formStateRef = useRef({});
     const validationRules = useRef({});
     const initialValues = {};
+    const supportedFields = [
+        'checkbox',
+        'radio',
+        'text',
+        'password',
+        'email',
+        'number',
+        'date',
+        'file',
+        'range',
+        'url'
+    ];
 
     //////////////////////////////////////////
 
@@ -25,23 +37,28 @@ const useFormsio = () => {
     //////////////////////////////////////////
 
     const handleChange = event => {
-        const { name, value, type } = event.target;
-        if(type === 'text' || type === 'password' || type === 'email'|| type === 'number') {
+        //console.log(typeof event.target.value);
+        console.log(event);
+        const { name, value, type , checked } = event.target;
+        if(supportedFields.includes(type)) {
             formStateRef.current[name] = {
                 ...formStateRef.current[name],
                 pristine: false,
                 dirty: true
             }
+            console.log(event);
+            let fieldValue = value;
+            //if(type === 'checkbox' || type === 'radio') fieldValue = checked;
             setFormState(prevState => {
                 const fieldValues = { ...prevState[name] };
                 return {
                     ...prevState,
                     [name]: {
                         ...fieldValues,
-                        value: value,
+                        value: fieldValue,
                         pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
                         dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty,
-                        errors: validations(value, validationRules.current[name])
+                        errors: validations(fieldValue, validationRules.current[name], type)
                     }
                 }
             });

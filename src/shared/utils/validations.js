@@ -8,7 +8,7 @@ import {
             testForValidDOB 
         } from './validationMethods';
 
-const validations = ( fieldValue, validationsToPerform ) => {
+const validations = ( fieldValue, validationsToPerform, type ) => {
     const errorsOccurred = {};
     const emailRegex = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     const actualLength = String(fieldValue).length;
@@ -79,11 +79,19 @@ const validations = ( fieldValue, validationsToPerform ) => {
     if(validationsToPerform.validBirthDate && fieldValue) {
         let dateToBePassed = null;
         let dateSplitArray = [];
-        const fieldvalueArray = fieldValue.split('/');
+        let fieldvalueArray = [];
+        let fieldValueToBePassed = fieldValue;
+        if(type === 'date') {
+            const dateSplit = fieldValue.split('-');
+            fieldvalueArray = [dateSplit[2], dateSplit[1], dateSplit[0]];
+            fieldValueToBePassed = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`;
+        } else {
+            fieldvalueArray = fieldValue.split('/');
+        }
         if(validationsToPerform.validBirthDate === true) { 
-            dateToBePassed = fieldValue;
+            dateToBePassed = fieldValueToBePassed;
             dateSplitArray = [...fieldvalueArray];
-        } else if(typeof(validationsToPerform.validBirthDate) === 'string'){
+        } else if(typeof(validationsToPerform.validBirthDate) === 'string' && type !== 'date') {
             let date = null;
             let month = null;
             let year = null;
@@ -96,8 +104,10 @@ const validations = ( fieldValue, validationsToPerform ) => {
             dateToBePassed = `${date}/${month}/${year}`;
             dateSplitArray = [date, month, year];
         }
-        if(!testForRegex(defaultDateRegex, dateToBePassed) || !testForDOBInputType(dateSplitArray) || testForValidDOB(dateSplitArray)) {
-            errorsOccurred.validBirthDate = true;
+        if(dateToBePassed !== null && dateSplitArray.length === 3) {
+            if(!testForRegex(defaultDateRegex, dateToBePassed) || !testForDOBInputType(dateSplitArray) || testForValidDOB(dateSplitArray)) {
+                errorsOccurred.validBirthDate = true;
+            }
         }
     }
 

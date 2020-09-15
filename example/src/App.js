@@ -10,10 +10,11 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ register, formState, validationRules ] = useFormsio();
+    const [ register, formState ] = useFormsio();
+  
     //console.log('Component');
     console.log(formState);
-    console.log(validationRules);
+    //console.log(validationRules);
 
     return(
         <form>
@@ -30,8 +31,22 @@ const App = () => {
                                     validators: 'required|maxLength:6:7|minLength:6|maxLength:10|zzz|minLength:8|required:false|maxLength:false', 
                                     regexValidators: { 
                                         pattern: /^[1-9][0-9]{5}$/, 
+                                        validBirthDate: true,
                                         validMobile: /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/, 
                                         zenz: 'mm'  } 
+                                }) }
+                autoComplete = 'off' />
+
+            <input
+                type = 'date'
+                placeholder = 'Enter your Number'
+                name = 'userNumber'
+                ref = { register({
+                                    name: 'userNumber',
+                                    validators: 'required|email',
+                                    regexValidators: {
+                                        validBirthDate: true
+                                    }
                                 }) }
                 autoComplete = 'off' />
 
@@ -46,7 +61,7 @@ const App = () => {
                 autoComplete = 'off' />
 
             <input
-                type = 'text'
+                type = 'date'
                 placeholder = 'Tell us your DOB'
                 name = 'userDOB'
                 ref = { register({
@@ -66,6 +81,20 @@ const App = () => {
                                     regexValidators: { passwordStrength: true }
                                 }) }
                 autoComplete = 'off' />
+
+            {/* <div>
+
+                <input
+                    type = 'checkbox'
+                    name = 'userAcceptance'
+                    id = 'userAcceptance'
+                    ref = { register({
+                                        name: 'userAcceptance',
+                                        validators: 'required'
+                                    })} />
+                    <label htmlFor = 'userAcceptance'> I have read all conditions </label>
+
+            </div> */}
 
             <button
                 type = 'submit'>
