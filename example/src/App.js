@@ -10,11 +10,11 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ register, formState ] = useFormsio();
+    const [ register, formState, validationRules ] = useFormsio();
   
     //console.log('Component');
     console.log(formState);
-    //console.log(validationRules);
+    console.log(validationRules);
 
     return(
         <form>
@@ -42,7 +42,6 @@ const App = () => {
                 placeholder = 'Enter your Number'
                 name = 'userNumber'
                 ref = { register({
-                                    name: 'userNumber',
                                     validators: 'required|email',
                                     regexValidators: {
                                         validBirthDate: true
@@ -54,10 +53,7 @@ const App = () => {
                 type = 'email'
                 placeholder = 'Enter your email'
                 name = 'userEmail'
-                ref = { register({  
-                                    name: 'userEmail', 
-                                    validators: 'required|email' 
-                                }) }
+                ref = { register() }
                 autoComplete = 'off' />
 
             <input
@@ -65,7 +61,6 @@ const App = () => {
                 placeholder = 'Tell us your DOB'
                 name = 'userDOB'
                 ref = { register({
-                                    name: 'userDOB',
                                     validators: 'required',
                                     regexValidators: { validBirthDate: 'yyyy-mm-dd' }
                                 }) }
@@ -76,25 +71,47 @@ const App = () => {
                 placeholder = 'Please provide a password'
                 name = 'userPassword'
                 ref = { register({
-                                    name: 'userPassword',
                                     validators: 'required',
                                     regexValidators: { passwordStrength: true }
                                 }) }
                 autoComplete = 'off' />
 
-            {/* <div>
+            <div>
 
                 <input
                     type = 'checkbox'
                     name = 'userAcceptance'
                     id = 'userAcceptance'
                     ref = { register({
-                                        name: 'userAcceptance',
                                         validators: 'required'
                                     })} />
                     <label htmlFor = 'userAcceptance'> I have read all conditions </label>
 
-            </div> */}
+            </div>
+
+            <div>
+
+                <input
+                    type = 'radio'
+                    name = 'userGender'
+                    id = 'userGenderMale'
+                    ref = { register({
+                                        validators: 'required:false|required|maxLength:3',
+                                        initialValue: 'Male'
+                                    }) } />
+                <label htmlFor = 'userGenderMale'> Male </label>
+
+                <input
+                    type = 'radio'
+                    name = 'userGender'
+                    id = 'userGenderFemale'
+                    ref = { register({
+                                        validators: 'required',
+                                        initialValue: 'Female'
+                                    }) } />
+                <label htmlFor = 'userGenderFemale'> Female </label>
+
+            </div>
 
             <button
                 type = 'submit'>

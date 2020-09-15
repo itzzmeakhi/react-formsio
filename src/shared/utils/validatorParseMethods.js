@@ -21,7 +21,7 @@ export const splitAString = (validatorString, op) => {
 
 export const removeInvalidAndSplit = (validatorStringArray, op) => {
     const validatorsAfterRemoval = validatorStringArray
-                                    .map(key => key.includes(op) ? key.split(':') : [key, true])
+                                    .map(key => key.includes(op) ? key.split(op) : [key, true])
                                     .filter(keyArray => {
                                         if(acceptedValidators[keyArray[0]] === undefined 
                                             || keyArray.length > 2) {
