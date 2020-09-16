@@ -77,10 +77,11 @@ const validations = ( fieldValue, validationsToPerform, type ) => {
     // Validation rule for VALID BIRTHDATE
 
     if(validationsToPerform.validBirthDate && fieldValue) {
-        let dateToBePassed = null;
+        let dateToBePassed = '';
         let dateSplitArray = [];
         let fieldvalueArray = [];
         let fieldValueToBePassed = fieldValue;
+        let canTriggerValidation = false;
         if(type === 'date') {
             const dateSplit = fieldValue.split('-');
             fieldvalueArray = [dateSplit[2], dateSplit[1], dateSplit[0]];
@@ -91,10 +92,12 @@ const validations = ( fieldValue, validationsToPerform, type ) => {
         if(validationsToPerform.validBirthDate === true) { 
             dateToBePassed = fieldValueToBePassed;
             dateSplitArray = [...fieldvalueArray];
+            canTriggerValidation = true;
         } else if(typeof(validationsToPerform.validBirthDate) === 'string' && type !== 'date') {
             let date = null;
             let month = null;
             let year = null;
+            canTriggerValidation = true;
             const patternToPass = validationsToPerform.validBirthDate.split('-');
             patternToPass.forEach((val, pos) => {
                 if(val === 'dd') date = Number(fieldvalueArray[pos]);
@@ -104,9 +107,10 @@ const validations = ( fieldValue, validationsToPerform, type ) => {
             dateToBePassed = `${date}/${month}/${year}`;
             dateSplitArray = [date, month, year];
         }
-        if(dateToBePassed !== null && dateSplitArray.length === 3) {
-            if(!testForRegex(defaultDateRegex, dateToBePassed) || !testForDOBInputType(dateSplitArray) || testForValidDOB(dateSplitArray)) {
-                errorsOccurred.validBirthDate = true;
+        if(canTriggerValidation) {
+            if(!testForRegex(defaultDateRegex, dateToBePassed) 
+                || !testForDOBInputType(dateSplitArray) || testForValidDOB(dateSplitArray)) {
+                    errorsOccurred.validBirthDate = true;
             }
         }
     }

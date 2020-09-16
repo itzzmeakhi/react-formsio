@@ -62,7 +62,7 @@ export const removeDuplicates = (validatorStringArray) => {
 
 ////////////////////////////////////////////////////////////////
 
-export const checkValuesValidity = (validatorStringArray) => {
+export const checkValuesValidity = (validatorStringArray, type) => {
     return validatorStringArray.filter(item => {
         if(item[0] === 'required') return item[1] === true ? true : false;
         if(item[0] === 'email') return item[1] === true ? true : false;
@@ -81,6 +81,7 @@ export const checkValuesValidity = (validatorStringArray) => {
         if(item[0] === 'validBirthDate') {
             if(item[1] === true) return true;
             if(typeof item[1] === 'string'
+                && type !== 'date'
                 && item[1].split('-').length === 3
                 && item[1].length === 10
                 && item[1].includes('mm')

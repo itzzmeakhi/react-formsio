@@ -22,29 +22,35 @@ const App = () => {
             {/* pincode: ^[1-9][0-9]{5}$   ---- 111111 */}
             {/* /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/   ----  (308)-135-7895 */}
             {/* mm-dd-yyyy || dd-mm-yyyy || yyyy-mm-dd */}
+            {/* name: 'userName', 
+                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:8|zzz|minLength:5|required:false|maxLength:false', 
+                                    regexValidators: { 
+                                        pattern: /^(\(+61\)|\+61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){6,9}$/, 
+                                        validBirthDate: true,
+                                        validMobile: true, 
+                                        zenz: 'mm'  }  */}
             <input
                 type = 'text'
                 placeholder = 'Enter your name'
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:10|zzz|minLength:8|required:false|maxLength:false', 
-                                    regexValidators: { 
-                                        pattern: /^[1-9][0-9]{5}$/, 
-                                        validBirthDate: true,
-                                        validMobile: /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/, 
-                                        zenz: 'mm'  } 
+                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:8|zzz|minLength:5|required:false|maxLength:false',
+                                    regexValidators: {
+                                        validBirthDate: 'mm-yyyy-dd'
+                                    }
                                 }) }
                 autoComplete = 'off' />
 
+
             <input
-                type = 'date'
+                type = 'email'
                 placeholder = 'Enter your Number'
                 name = 'userNumber'
                 ref = { register({
                                     validators: 'required|email',
                                     regexValidators: {
-                                        validBirthDate: true
+                                        pattern: /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
                                     }
                                 }) }
                 autoComplete = 'off' />
@@ -62,7 +68,7 @@ const App = () => {
                 name = 'userDOB'
                 ref = { register({
                                     validators: 'required',
-                                    regexValidators: { validBirthDate: 'yyyy-mm-dd' }
+                                    regexValidators: { validBirthDate: 'mm-dd-yyyy' }
                                 }) }
                 autoComplete = 'off' />
 

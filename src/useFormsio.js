@@ -107,10 +107,10 @@ const useFormsio = () => {
     const register = ( fieldArgs ) => ref => {
         if(supportedFields.includes(ref?.type)) {
             if(refs.current[fieldArgs?.name] === undefined) {
-                const validators = fieldArgs?.validators ? fieldArgs?.validators : '';
-                const regexValidators = fieldArgs?.regexValidators ? fieldArgs?.regexValidators : {};
+                const validators = fieldArgs?.validators ? fieldArgs?.validators : null;
+                const regexValidators = fieldArgs?.regexValidators ? fieldArgs?.regexValidators : null;
                 const initialValue = fieldArgs?.initialValue ? fieldArgs?.initialValue : '';
-                let objAfterComposed = validators || regexValidators ? composeValidators(validators, regexValidators) : {};
+                let objAfterComposed = (validators || regexValidators) ? composeValidators(validators, regexValidators, ref?.type) : {};
                 if(ref?.type === 'checkbox' || ref?.type === 'radio') {
                     objAfterComposed = Object.keys(objAfterComposed).reduce((acc, val) => {
                         if(objAfterComposed[val] === true) {
@@ -138,39 +138,26 @@ const useFormsio = () => {
 
     /////////////////////////////////////////////////////////////////////
 
-    const composeValidators = ( validatorStr, regexValidators ) => {
-        if(!validatorStr && !regexValidators) return;
+    const composeValidators = ( validatorStr, regexValidators, type ) => {
         let validatorRules = [];
         let regexValidatorRules = [];
-        if(validatorStr) {
-            const validatorRulesSplitArray = removeInvalidAndSplit(
-                                                splitAString(validatorStr, '|'), ':');
-            validatorRules = mapArrayToObj(
-                                removeDuplicates(checkValuesValidity(validatorRulesSplitArray))
-                            );
-        } else {
-            validatorRules = [];
-        }
-        if(regexValidators) {
-            regexValidatorRules = mapArrayToObj(
-                                    checkValuesValidity(mapRegexValidators(regexValidators))
+        if(type) {
+            if(validatorStr) {
+                const validatorRulesSplitArray = removeInvalidAndSplit(
+                                                    splitAString(validatorStr, '|'), ':');
+                validatorRules = mapArrayToObj(
+                                    removeDuplicates(checkValuesValidity(validatorRulesSplitArray, type))
                                 );
-        } else {
-            regexValidatorRules = [];
-        }
-        return Object.assign({}, ...validatorRules.concat(regexValidatorRules));
-    }
-
-    const composeValidatorForChecked = ( validatorStr, regexValidators ) => {
-        if(!validatorStr && !regexValidators) return;
-        let validatorRules = [];
-        let regexValidatorRules = [];
-        if(validatorStr) {
-            const validatorRulesSplitArray = removeInvalidAndSplit(
-                                                splitAString(validatorStr, '|'), ':');
-            console.log(validatorRulesSplitArray);
-            validatorRules = mapArrayToObj(
-                                removeDuplicates(checkValuesValidity(validatorRulesSplitArray)));
+            } else {
+                validatorRules = [];
+            }
+            if(regexValidators) {
+                regexValidatorRules = mapArrayToObj(
+                                        checkValuesValidity(mapRegexValidators(regexValidators), type)
+                                    );
+            } else {
+                regexValidatorRules = [];
+            }
         }
         return Object.assign({}, ...validatorRules.concat(regexValidatorRules));
     }
