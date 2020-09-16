@@ -15,6 +15,7 @@ const useFormsio = () => {
     const refs = useRef({});
     const formStateRef = useRef({});
     const validationRules = useRef({});
+    const isFormValid = useRef(false);
     const initialValues = {};
     const supportedFields = [
         'checkbox',
@@ -51,6 +52,14 @@ const useFormsio = () => {
         if(type === 'checkbox') fieldValue = checked;
         setFormState(prevState => {
             const fieldValues = { ...prevState[name] };
+            const errorsAvailable = validations(fieldValue, validationRules.current[name], type);
+            const haveErrors = Object.keys(errorsAvailable).length > 0;
+            formStateRef.current[name] = {
+                ...formStateRef.current[name],
+                invalid: haveErrors,
+                valid: !haveErrors
+            }
+            checkFormValidity();
             return {
                 ...prevState,
                 [name]: {
@@ -58,7 +67,9 @@ const useFormsio = () => {
                     value: fieldValue,
                     pristine: fieldValues.pristine ? !fieldValues.pristine : fieldValues.pristine,
                     dirty: fieldValues.dirty ? fieldValues.dirty : !fieldValues.dirty,
-                    errors: validations(fieldValue, validationRules.current[name], type)
+                    errors: {...errorsAvailable},
+                    invalid: haveErrors,
+                    valid: !haveErrors
                 }
             }
         });
@@ -94,8 +105,26 @@ const useFormsio = () => {
         }
     }
 
+    ////////////////////////////////////////////////
+
+    // Method that checks and sets the form validity
+
+    ////////////////////////////////////////////////
+
+    const checkFormValidity = () => {
+        const formStateKeys = Object.keys(formStateRef.current);
+        if(formStateKeys.length !== 0) {
+            const truthValueArray = formStateKeys
+                                        .filter(key => {
+                                            return formStateRef.current[key].invalid ? true : false;
+                                        });
+            console.log(truthValueArray.length)
+            isFormValid.current = truthValueArray.length > 0 ? false : true;
+        }
+    }
+
     useEffect(() => {
-        //console.log(formState);
+        //checkFormValidity();
     }, [ formState ]);
 
     ///////////////////////////////////////////////////////
@@ -113,7 +142,7 @@ const useFormsio = () => {
                 let objAfterComposed = (validators || regexValidators) ? composeValidators(validators, regexValidators, ref?.type) : {};
                 if(ref?.type === 'checkbox' || ref?.type === 'radio') {
                     objAfterComposed = Object.keys(objAfterComposed).reduce((acc, val) => {
-                        if(objAfterComposed[val] === true) {
+                        if(val === 'required') {
                             return {
                                 ...acc,
                                 [val]: objAfterComposed[val]
@@ -180,7 +209,6 @@ const useFormsio = () => {
                 && ((formStateRef.current[refKey] === undefined 
                     && formStateRef.current[fieldName] === undefined) 
                     || refs.current[refKey].type === 'radio')) {
-                        //const validityBasedOnValidators = Object.keys(validationRules.current[refKey]).length > 0;
                         const fieldValues = {
                             value: initialValues[refKey],
                             untouched: true,
@@ -200,11 +228,14 @@ const useFormsio = () => {
                         } else {
                             otherThanRadio = true;
                         }
+                        const validityBasedOnValidators = Object.keys(validationRules.current[refCompoundName]).length > 0;
                         formStateRef.current[refCompoundName] = {
                             touched: false,
                             untouched: true,
                             pristine: true,
-                            dirty: false
+                            dirty: false,
+                            invalid: validityBasedOnValidators,
+                            valid: !validityBasedOnValidators
                         };
                         setFormState(prevState => {
                             if(radioChild === true) {
@@ -212,6 +243,8 @@ const useFormsio = () => {
                                     ...prevState,
                                     [refCompoundName]: {
                                         ...prevState[refCompoundName],
+                                        invalid: validityBasedOnValidators,
+                                        valid: !validityBasedOnValidators,
                                         children: {
                                             ...prevState[refCompoundName].children,
                                             [refKey]: true
@@ -223,6 +256,8 @@ const useFormsio = () => {
                                     ...prevState,
                                     [refCompoundName]: {
                                         ...fieldValues,
+                                        invalid: validityBasedOnValidators,
+                                        valid: !validityBasedOnValidators,
                                         value: '',
                                         children: {
                                             [refKey]: true
@@ -233,7 +268,9 @@ const useFormsio = () => {
                                 return {
                                     ...prevState,
                                     [refCompoundName]: {
-                                        ...fieldValues
+                                        ...fieldValues,
+                                        invalid: validityBasedOnValidators,
+                                        valid: !validityBasedOnValidators
                                     }
                                 }
                             }
@@ -242,7 +279,12 @@ const useFormsio = () => {
         });
     }, []);
 
-    return [ register, formState, validationRules.current ];
+    return { 
+            register, 
+            formState, 
+            validationRules: validationRules.current, 
+            isFormValid: isFormValid.current 
+        };
 };
 
 export { useFormsio };

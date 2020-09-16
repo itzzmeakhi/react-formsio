@@ -10,11 +10,12 @@ const App = () => {
     //     userName: '',
     //     userEmail: ''
     // };
-    const [ register, formState, validationRules ] = useFormsio();
+    const { register, formState, validationRules, isFormValid } = useFormsio();
   
     //console.log('Component');
     console.log(formState);
     console.log(validationRules);
+    console.log(isFormValid);
 
     return(
         <form>
@@ -35,9 +36,10 @@ const App = () => {
                 name = 'userName'
                 ref = { register({ 
                                     name: 'userName', 
-                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:8|zzz|minLength:5|required:false|maxLength:false',
+                                    initialValue: 'Akhil',
+                                    validators: 'required',
                                     regexValidators: {
-                                        validBirthDate: 'mm-yyyy-dd'
+                                        pattern: /^[1-9][0-9]{5}$/
                                     }
                                 }) }
                 autoComplete = 'off' />
@@ -48,10 +50,7 @@ const App = () => {
                 placeholder = 'Enter your Number'
                 name = 'userNumber'
                 ref = { register({
-                                    validators: 'required|email',
-                                    regexValidators: {
-                                        pattern: /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
-                                    }
+                                    validators: 'required|email'
                                 }) }
                 autoComplete = 'off' />
 
@@ -67,8 +66,7 @@ const App = () => {
                 placeholder = 'Tell us your DOB'
                 name = 'userDOB'
                 ref = { register({
-                                    validators: 'required',
-                                    regexValidators: { validBirthDate: 'mm-dd-yyyy' }
+                                    validators: 'required'
                                 }) }
                 autoComplete = 'off' />
 
@@ -112,7 +110,7 @@ const App = () => {
                     name = 'userGender'
                     id = 'userGenderFemale'
                     ref = { register({
-                                        validators: 'required',
+                                        validators: 'required|email',
                                         initialValue: 'Female'
                                     }) } />
                 <label htmlFor = 'userGenderFemale'> Female </label>
