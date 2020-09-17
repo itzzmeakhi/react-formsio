@@ -117,6 +117,17 @@ const App = () => {
 
             </div>
 
+            <select 
+                name = 'userExp'
+                ref = { register({
+                                    validators: 'required'
+                                }) } >
+                    <option value = ''></option>
+                    <option value = 'fresher'> Fresher </option>
+                    <option value = 'intermmediate'> Intermmediate </option>
+                    <option value = 'experienced'> Experienced </option>
+            </select>
+
             <button
                 type = 'submit'>
                     Submit

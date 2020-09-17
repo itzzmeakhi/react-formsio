@@ -28,7 +28,9 @@ const useFormsio = () => {
         'date',
         'file',
         'range',
-        'url'
+        'url',
+        'select',
+        'textarea'
     ];
 
     //////////////////////////////////////////
@@ -134,30 +136,37 @@ const useFormsio = () => {
     ///////////////////////////////////////////////////////
 
     const register = ( fieldArgs ) => ref => {
-        if(supportedFields.includes(ref?.type)) {
-            if(refs.current[fieldArgs?.name] === undefined) {
-                const validators = fieldArgs?.validators ? fieldArgs?.validators : null;
-                const regexValidators = fieldArgs?.regexValidators ? fieldArgs?.regexValidators : null;
-                const initialValue = fieldArgs?.initialValue ? fieldArgs?.initialValue : '';
-                let objAfterComposed = (validators || regexValidators) ? composeValidators(validators, regexValidators, ref?.type) : {};
-                if(ref?.type === 'checkbox' || ref?.type === 'radio') {
-                    objAfterComposed = Object.keys(objAfterComposed).reduce((acc, val) => {
-                        if(val === 'required') {
-                            return {
-                                ...acc,
-                                [val]: objAfterComposed[val]
-                            }
-                        } else return acc;
-                    }, {});
-                }
-                let name = ref?.name;
-                validationRules.current[name] = objAfterComposed;
-                if(ref?.type === 'radio') name = ref?.id;
-                initialValues[name] = initialValue ? initialValue : '';
-                refs.current[name] = ref;
+        if(ref) {
+            let type = '';
+            const tagName = document.getElementsByName(ref.name)[0].tagName.toLowerCase();
+            type = (tagName === 'select' || tagName === 'textarea') ? tagName : ref.type;
+            if(supportedFields.includes(type)) {
+                if(refs.current[fieldArgs?.name] === undefined) {
+                    const validators = fieldArgs?.validators ? fieldArgs?.validators : null;
+                    const regexValidators = fieldArgs?.regexValidators ? fieldArgs?.regexValidators : null;
+                    const initialValue = fieldArgs?.initialValue ? fieldArgs?.initialValue : '';
+                    let objAfterComposed = (validators || regexValidators) ? 
+                                                                composeValidators(validators, regexValidators, type) 
+                                                                : {};
+                    if(type === 'checkbox' || type === 'radio') {
+                        objAfterComposed = Object.keys(objAfterComposed).reduce((acc, val) => {
+                            if(val === 'required') {
+                                return {
+                                    ...acc,
+                                    [val]: objAfterComposed[val]
+                                }
+                            } else return acc;
+                        }, {});
+                    }
+                    let name = ref.name;
+                    validationRules.current[name] = objAfterComposed;
+                    if(type === 'radio') name = ref.id;
+                    initialValues[name] = initialValue ? initialValue : '';
+                    refs.current[name] = ref;
+                } 
+                //console.log('Register');
             } 
-            //console.log('Register');
-        } 
+        }
     };
     
     /////////////////////////////////////////////////////////////////////
