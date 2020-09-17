@@ -66,9 +66,7 @@ export const testForValidDOB = (dobArr) => {
 }
 
 export const composeRulesAndValidate = (rulesStr, val) => {
-    //const acceptedRules = ['Lc', 'Uc', 'D', 'S', 'L'];
     const rulesSplitArray = splitAString(rulesStr, '|');
-    
     const validationResultArr = rulesSplitArray.map(rule => {
         const fieldvalues = splitAString(rule, ':');
         if(fieldvalues[0] === 'Uc') {
@@ -92,7 +90,6 @@ export const composeRulesAndValidate = (rulesStr, val) => {
                 ['hasMinimumLength']: testForMinLength(val.length, Number(fieldvalues[1]))
             };
         }
-        
     });
     return Object.assign({}, ...validationResultArr);
 }

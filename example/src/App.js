@@ -32,15 +32,20 @@ const App = () => {
                                         zenz: 'mm'  }  */}
 
             <input
-                type = 'text'
+                type = 'file'
                 name = 'userName'
                 ref = { register({
-                    validators: 'required|maxLength:8|minLength:6',
+                    validators: 'required|minLength:6:8|required:false|xyz:0|minLength:e|maxLength:8|emailu',
                     regexValidators: {
-                        passwordStrength: true
+                        validBirthdate: 'mmm-yyy',
+                        pattern: 'Hello',
+                        validMobile: 'aabs98',
+                        passwordStrength: 'Lc:2|xr:2|Uc:a'
                     }
                 }) }
                 autoComplete = 'off' />
+
+
 
             <button
                 type = 'submit'>

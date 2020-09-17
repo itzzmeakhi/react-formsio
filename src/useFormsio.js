@@ -148,7 +148,7 @@ const useFormsio = () => {
                     let objAfterComposed = (validators || regexValidators) ? 
                                                                 composeValidators(validators, regexValidators, type) 
                                                                 : {};
-                    if(type === 'checkbox' || type === 'radio') {
+                    if(type === 'checkbox' || type === 'radio' || type === 'select' || type === 'file' || type === 'range') {
                         objAfterComposed = Object.keys(objAfterComposed).reduce((acc, val) => {
                             if(val === 'required') {
                                 return {
