@@ -128,6 +128,12 @@ const App = () => {
                     <option value = 'experienced'> Experienced </option>
             </select>
 
+            <textarea
+                name = 'userStory'
+                ref = { register({
+                                    validators: 'required'
+                                }) } ></textarea>
+
             <button
                 type = 'submit'>
                     Submit
