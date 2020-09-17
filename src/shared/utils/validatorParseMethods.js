@@ -76,7 +76,19 @@ export const checkValuesValidity = (validatorStringArray, type) => {
         }
         if(item[0] === 'passwordStrength') {
             if(item[1] === true) return true;
-            if(typeof(item[1]) === 'string') return true;
+            if(typeof(item[1]) === 'string') {
+                const acceptedKeys = ['Lc', 'Uc', 'L', 'D', 'S'];
+                let splitKeys = splitAString(item[1], '|');
+                splitKeys = splitKeys.filter(key => {
+                    const keyFields = splitAString(key, ':');
+                    if(keyFields.length !== 2) return true;
+                    if(acceptedKeys.includes(keyFields[0]) 
+                        && Number.isInteger(Number(keyFields[1]))) return false;
+                    return true;
+                });
+                if(splitKeys.length === 0) return true;
+            }
+            return false;
         }
         if(item[0] === 'validBirthDate') {
             if(item[1] === true) return true;
@@ -86,8 +98,8 @@ export const checkValuesValidity = (validatorStringArray, type) => {
                 && item[1].length === 10
                 && item[1].includes('mm')
                 && item[1].includes('dd')
-                && item[1].includes('yyyy')
-                && item[1].includes('-')) return true;
+                && item[1].includes('yyyy')) return true;
+            return false;
         }
     });
 }

@@ -19,7 +19,7 @@ const App = () => {
 
     return(
         <form>
-            {/* validators: 'required|minLength:6:8|required:false|xxx:0|minLength:e|minLength:9|maxLength:8' */}
+            {/* validators: 'required|minLength:6:8|required:false|xyz:0|minLength:e|minLength:9|maxLength:8' */}
             {/* pincode: ^[1-9][0-9]{5}$   ---- 111111 */}
             {/* /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/   ----  (308)-135-7895 */}
             {/* mm-dd-yyyy || dd-mm-yyyy || yyyy-mm-dd */}
@@ -30,109 +30,17 @@ const App = () => {
                                         validBirthDate: true,
                                         validMobile: true, 
                                         zenz: 'mm'  }  */}
+
             <input
                 type = 'text'
-                placeholder = 'Enter your name'
                 name = 'userName'
-                ref = { register({ 
-                                    name: 'userName', 
-                                    initialValue: 'Akhil',
-                                    validators: 'required',
-                                    regexValidators: {
-                                        pattern: /^[1-9][0-9]{5}$/
-                                    }
-                                }) }
-                autoComplete = 'off' />
-
-
-            <input
-                type = 'email'
-                placeholder = 'Enter your Number'
-                name = 'userNumber'
                 ref = { register({
-                                    validators: 'required|email'
-                                }) }
+                    validators: 'required|maxLength:8|minLength:6',
+                    regexValidators: {
+                        passwordStrength: true
+                    }
+                }) }
                 autoComplete = 'off' />
-
-            <input
-                type = 'email'
-                placeholder = 'Enter your email'
-                name = 'userEmail'
-                ref = { register() }
-                autoComplete = 'off' />
-
-            <input
-                type = 'date'
-                placeholder = 'Tell us your DOB'
-                name = 'userDOB'
-                ref = { register({
-                                    validators: 'required'
-                                }) }
-                autoComplete = 'off' />
-
-            <input
-                type = 'password'
-                placeholder = 'Please provide a password'
-                name = 'userPassword'
-                ref = { register({
-                                    validators: 'required',
-                                    regexValidators: { passwordStrength: true }
-                                }) }
-                autoComplete = 'off' />
-
-            <div>
-
-                <input
-                    type = 'checkbox'
-                    name = 'userAcceptance'
-                    id = 'userAcceptance'
-                    ref = { register({
-                                        validators: 'required'
-                                    })} />
-                    <label htmlFor = 'userAcceptance'> I have read all conditions </label>
-
-            </div>
-
-            <div>
-
-                <input
-                    type = 'radio'
-                    name = 'userGender'
-                    id = 'userGenderMale'
-                    ref = { register({
-                                        validators: 'required:false|required|maxLength:3',
-                                        initialValue: 'Male'
-                                    }) } />
-                <label htmlFor = 'userGenderMale'> Male </label>
-
-                <input
-                    type = 'radio'
-                    name = 'userGender'
-                    id = 'userGenderFemale'
-                    ref = { register({
-                                        validators: 'required|email',
-                                        initialValue: 'Female'
-                                    }) } />
-                <label htmlFor = 'userGenderFemale'> Female </label>
-
-            </div>
-
-            <select 
-                name = 'userExp'
-                ref = { register({
-                                    validators: 'required'
-                                }) } >
-                    <option value = ''></option>
-                    <option value = 'fresher'> Fresher </option>
-                    <option value = 'intermmediate'> Intermmediate </option>
-                    <option value = 'experienced'> Experienced </option>
-            </select>
-
-            <textarea
-                name = 'userStory'
-                ref = { register({
-                                    validators: 'required'
-                                }) } ></textarea>
 
             <button
                 type = 'submit'>
