@@ -120,7 +120,6 @@ const useFormsio = () => {
                                         .filter(key => {
                                             return formStateRef.current[key].invalid ? true : false;
                                         });
-            console.log(truthValueArray.length)
             isFormValid.current = truthValueArray.length > 0 ? false : true;
         }
     }
@@ -141,7 +140,8 @@ const useFormsio = () => {
             const tagName = document.getElementsByName(ref.name)[0].tagName.toLowerCase();
             type = (tagName === 'select' || tagName === 'textarea') ? tagName : ref.type;
             if(supportedFields.includes(type)) {
-                if(refs.current[fieldArgs?.name] === undefined) {
+                let refName = type === 'radio' ? ref.id : ref.name;
+                if(refs.current[refName] === undefined) {
                     const validators = fieldArgs?.validators ? fieldArgs?.validators : null;
                     const regexValidators = fieldArgs?.regexValidators ? fieldArgs?.regexValidators : null;
                     const initialValue = fieldArgs?.initialValue ? fieldArgs?.initialValue : '';
@@ -164,7 +164,6 @@ const useFormsio = () => {
                     initialValues[name] = initialValue ? initialValue : '';
                     refs.current[name] = ref;
                 } 
-                //console.log('Register');
             } 
         }
     };
@@ -207,7 +206,6 @@ const useFormsio = () => {
     ///////////////////////////////////////////
 
     useEffect(() => {
-        //console.log('Effect');
         const refsKeys = Object.keys(refs.current);
         refsKeys.forEach(refKey => {
             refs.current[refKey].value = initialValues[refKey];

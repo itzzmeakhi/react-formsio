@@ -1,59 +1,41 @@
-import React from 'react'
-
-import { useFormsio } from 'react-formsio';
-import 'react-formsio/dist/index.css';
-
+import React from 'react';
 import './App.css';
 
+import { useFormsio } from 'react-formsio';
+
 const App = () => {
-    // const INITIAL_STATE = {
-    //     userName: '',
-    //     userEmail: ''
-    // };
-    const { register, formState, validationRules, isFormValid } = useFormsio();
-  
-    //console.log('Component');
-    console.log(formState);
+	const { register, 
+			formState, 
+			validationRules, 
+			isFormValid } = useFormsio();
+    const { userName } = formState;
     console.log(validationRules);
-    console.log(isFormValid);
+    console.log(formState);
+	
+	const handleSubmit = event => {
+		event.preventDefault();
+	}
+	return(
+		<div className = 'App'>
+			<form onSubmit = {handleSubmit} >
+				<input
+					type = 'text'
+					name = 'userName'
+					ref = { register({
+						validators: 'required|minLength:6'
+					}) }
+					autoComplete = 'off' />
+				{ userName?.errors?.required ? 
+                    <p> UserName is required </p> : null }
+				{ userName?.errors?.minLength ? 
+                    <p> UserName should be of minimum 6 character's length </p> : null }
 
-    return(
-        <form>
-            {/* validators: 'required|minLength:6:8|required:false|xyz:0|minLength:e|minLength:9|maxLength:8' */}
-            {/* pincode: ^[1-9][0-9]{5}$   ---- 111111 */}
-            {/* /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/   ----  (308)-135-7895 */}
-            {/* mm-dd-yyyy || dd-mm-yyyy || yyyy-mm-dd */}
-            {/* name: 'userName', 
-                                    validators: 'required|maxLength:6:7|minLength:6|maxLength:8|zzz|minLength:5|required:false|maxLength:false', 
-                                    regexValidators: { 
-                                        pattern: /^(\(+61\)|\+61|\(0[1-9]\)|0[1-9])?( ?-?[0-9]){6,9}$/, 
-                                        validBirthDate: true,
-                                        validMobile: true, 
-                                        zenz: 'mm'  }  */}
-
-            <input
-                type = 'file'
-                name = 'userName'
-                ref = { register({
-                    validators: 'required|minLength:6:8|required:false|xyz:0|minLength:e|maxLength:8|emailu',
-                    regexValidators: {
-                        validBirthdate: 'mmm-yyy',
-                        pattern: 'Hello',
-                        validMobile: 'aabs98',
-                        passwordStrength: 'Lc:2|xr:2|Uc:a'
-                    }
-                }) }
-                autoComplete = 'off' />
-
-
-
-            <button
-                type = 'submit'>
-                    Submit
-            </button>
-
-        </form>
-    )
+                <input type = 'radio' name = 'userGender' id = 'userMale' ref = {register({validators: 'required', initialValue: 'Male'})} /> Male
+                <input type = 'radio' name = 'userGender' id = 'userFemale' ref = {register({validators: 'required'})} /> Female
+                <button type = 'submit'> Submit </button>
+			</form>
+		</div>
+	)
 }
 
-export default React.memo(App);
+export default App;

@@ -1,8 +1,16 @@
 # react-formsio
 
-> Made with create-react-library
+Easy to use, super light form validation library for React.
 
-[![NPM](https://img.shields.io/npm/v/react-formsio.svg)](https://www.npmjs.com/package/react-formsio) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+-----
+
+## Background
+
+Before jumping to React, I was an Angular Developer. During the initial days
+of learning React, I was like 'Oh! I am kind of missing Angular's kind of
+built in validation in React', and the result was this library.
+
 
 ## Install
 
