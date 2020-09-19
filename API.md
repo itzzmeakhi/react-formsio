@@ -1,5 +1,12 @@
 ## API
 
+- [useFormsio](#useFormsio)
+    - [register](#register)
+    - [formState](#formState)
+    - [validationRules](#validationRules)
+    - [isFormValid](#isFormValid)
+
+
 ### useFormsio
 It is a named export, can be imported as follows.
 ```jsx
