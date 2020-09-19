@@ -9,7 +9,16 @@
     - [validators](#validators)
     - [regexValidators](#regexValidators)
     - [initialValue](#initialValue)
-- [Validation Rules supported](#Validation Rules supported)
+- [Validation Rules supported](#Validations)
+    - [required](#required)
+    - [email](#email)
+    - [minLength](#minLength)
+    - [maxLength](#maxLength)
+    - [pattern](#pattern)
+    - [validMobile](#validMobile)
+    - [validBirthDate](#validBirthDate)
+    - [passwordStrength](#passwordStrength)
+
 
 
 ### useFormsio
@@ -210,7 +219,7 @@ register({
 })
 ```
 
-### Validation Rules supported
+### Validations
 
 #### required 
 
