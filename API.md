@@ -5,6 +5,11 @@
     - [formState](#formState)
     - [validationRules](#validationRules)
     - [isFormValid](#isFormValid)
+- [register](#register)
+    - [validators](#validators)
+    - [regexValidators](#regexValidators)
+    - [initialValue](#initialValue)
+- [Validation Rules supported](#Validation Rules supported)
 
 
 ### useFormsio
@@ -205,7 +210,7 @@ register({
 })
 ```
 
-### Validations supported
+### Validation Rules supported
 
 #### required 
 
