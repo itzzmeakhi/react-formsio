@@ -85,23 +85,23 @@ export const composeRulesAndValidate = (rulesStr, val) => {
         const fieldvalues = splitAString(rule, ':');
         if(fieldvalues[0] === 'Uc') {
             return { 
-                ['hasUpperCase']: testForRegex(new RegExp(`^(.*[A-Z]){${fieldvalues[1]}}.*$`), val)
+                ['hasUpperCase']: !testForRegex(new RegExp(`^(.*[A-Z]){${fieldvalues[1]}}.*$`), val)
             };
         } else if(fieldvalues[0] === 'Lc') {
             return { 
-                ['hasLowerCase']: testForRegex(new RegExp(`^(.*[a-z]){${fieldvalues[1]}}.*$`), val) 
+                ['hasLowerCase']: !testForRegex(new RegExp(`^(.*[a-z]){${fieldvalues[1]}}.*$`), val) 
             };
         } else if(fieldvalues[0] === 'D') {
             return { 
-                ['hasNumbers']: testForRegex(new RegExp(`^(.*[0-9]){${fieldvalues[1]}}.*$`), val) 
+                ['hasNumbers']: !testForRegex(new RegExp(`^(.*[0-9]){${fieldvalues[1]}}.*$`), val) 
             };
         } else if(fieldvalues[0] === 'S') {
             return { 
-                ['hasSymbols']: testForRegex(new RegExp(`^(.*[*!@#$&*]){${fieldvalues[1]}}.*$`), val) 
+                ['hasSymbols']: !testForRegex(new RegExp(`^(.*[*!@#$&*]){${fieldvalues[1]}}.*$`), val) 
             };
         } else if(fieldvalues[0] === 'L') {
             return { 
-                ['hasMinimumLength']: testForMinLength(val.length, Number(fieldvalues[1]))
+                ['hasMinimumLength']: !testForMinLength(val.length, Number(fieldvalues[1]))
             };
         }
     });

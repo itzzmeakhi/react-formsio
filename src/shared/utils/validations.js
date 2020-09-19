@@ -128,7 +128,7 @@ const validations = ( fieldValue, validationsToPerform, type ) => {
                 validationResultObj = composeRulesAndValidate(defaultPasswordString, fieldValue);
             }
             const errorsIfAvailable = Object.keys(validationResultObj).filter(key => {
-                return !validationResultObj[key] ? true : false;
+                return validationResultObj[key] ? true : false;
             }).length;
             if(errorsIfAvailable !== 0) {
                 errorsOccurred.passwordStrength = {
