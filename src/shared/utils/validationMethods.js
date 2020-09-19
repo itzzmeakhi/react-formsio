@@ -1,21 +1,31 @@
 import { splitAString } from './validatorParseMethods';
 
+// Method that converts to regex and tests for Regex
+
 export const testForCustomRegex = (regex, value) => {
     const regexPattern = new RegExp(regex);
     return regexPattern.test(value) ? true : false;
 }
 
+// Method for matching the regex
+
 export const testForRegex = (regex, value) => {
     return regex.test(value) ? true : false;
 }
+
+// Method for checking for maximum length
 
 export const testForMaxLength = (actualLength, requiredLength) => {
     return actualLength <= requiredLength;
 }
 
+// Method for checking for minimum length
+
 export const testForMinLength = (actualLength, requiredLength) => {
     return actualLength >= requiredLength;
 }
+
+// Method for checking DOD input type
 
 export const testForDOBInputType = (dobArr) => {
     const truthyArray = dobArr.filter(elem => {
@@ -23,6 +33,8 @@ export const testForDOBInputType = (dobArr) => {
     });
     return truthyArray.length < 3 ? false : true;
 }
+
+// Method for checking a valid DOB
 
 export const testForValidDOB = (dobArr) => {
     let birthDate = Number(dobArr[0]);
@@ -64,6 +76,8 @@ export const testForValidDOB = (dobArr) => {
     }
     return inValidDate;
 }
+
+// Method for checking the password strength
 
 export const composeRulesAndValidate = (rulesStr, val) => {
     const rulesSplitArray = splitAString(rulesStr, '|');
