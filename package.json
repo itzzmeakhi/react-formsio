@@ -2,6 +2,16 @@
   "name": "react-formsio",
   "version": "1.0.1",
   "description": "Made with create-react-library",
+  "keywords": [
+      "react",
+      "reactjs",
+      "forms",
+      "form-validation",
+      "validation",
+      "react-formsio",
+      "formsio",
+      "useFormsio"
+  ],
   "author": "itzzmeakhi",
   "license": "MIT",
   "repository": "itzzmeakhi/react-formsio",
