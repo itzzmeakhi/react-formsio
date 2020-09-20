@@ -41,7 +41,6 @@ const useFormsio = () => {
     //////////////////////////////////////////
 
     const handleChange = event => {
-        console.log('Yes');
         const { name, value, type , checked } = event.target;
         const refFieldValues = {...formStateRef.current[name]};
         if(refFieldValues.pristine === false || refFieldValues.dirty === false) {

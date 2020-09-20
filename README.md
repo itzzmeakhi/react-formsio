@@ -66,9 +66,22 @@ const App = () => {
 export default App;
 ```
 
-## 3. More
+## Example & Demo
+
+
+[![React Formsio Demo GIF](images/react-formsio-demo.gif)](https://react-formsio.stackblitz.io)
+
+### [Stackblitz Link](https://stackblitz.com/edit/react-formsio?file=src/App.js)
+### [Live Demo](https://react-formsio.stackblitz.io)
+
+
+## More
 
 See the [API/Tutorial](/API.md) for more information.
+
+## Bug / Feature Request
+
+If you find a bug or you'd like to request a new function, kindly open an issue [here](https://github.com/itzzmeakhi/react-formsio/issues/new). Please include your queries and their expected results.
 
 
 ## License

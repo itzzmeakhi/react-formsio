@@ -9,8 +9,6 @@ export default function App() {
           formState,
           isFormValid } = useFormsio();
 
-
-
   const { userName,
           userEmail,
           userPassword,
@@ -26,11 +24,19 @@ export default function App() {
     console.log(formState);
   }
 
+  // Method to check whether object is empty or not
+
+  const isEmpty = obj => {
+      if(!obj) return true;
+      if(Object.keys(obj).length === 0) return true;
+      return false;
+  }
+
   return (
     <div className = 'app'>
 
       <div className = 'header'> 
-        <p> Hello React formsio User!! </p>
+        <p> Hello React formsio User <span>🤩 </span>!! </p>
       </div>
 
       <div className = 'form-container'>
@@ -47,6 +53,7 @@ export default function App() {
               type = 'text'
               id = 'userName'
               name = 'userName'
+              className = {`${isEmpty(userName?.errors) ? '' : 'error-input'}`}
               ref = {
                 register({
                   validators: 'required|minLength:6',
@@ -70,6 +77,7 @@ export default function App() {
               type = 'email'
               id = 'userEmail'
               name = 'userEmail'
+              className = {`${isEmpty(userEmail?.errors) ? '' : 'error-input'}`}
               ref = {
                 register({
                   validators: 'required|email'
@@ -92,6 +100,7 @@ export default function App() {
               type = 'password'
               id = 'userPassword'
               name = 'userPassword'
+              className = {`${isEmpty(userPassword?.errors) ? '' : 'error-input'}`}
               ref = {
                 register({
                   validators: 'required',
@@ -121,6 +130,7 @@ export default function App() {
               type = 'text'
               id = 'userDOB'
               name = 'userDOB'
+              className = {`${isEmpty(userDOB?.errors) ? '' : 'error-input'}`}
               placeholder = 'MM/DD/YYYY'
               ref = {
                 register({
@@ -147,6 +157,7 @@ export default function App() {
               type = 'text'
               id = 'userContactNumber'
               name = 'userContactNumber'
+              className = {`${isEmpty(userContactNumber?.errors) ? '' : 'error-input'}`}
               ref = {
                 register({
                   validators: 'required',
@@ -171,6 +182,7 @@ export default function App() {
             <select 
               name = 'userExperience' 
               id = 'userExperience'
+              className = {`${isEmpty(userExperience?.errors) ? '' : 'error-input'}`}
               ref = {
                 register({
                   validators: 'required'
@@ -242,7 +254,7 @@ export default function App() {
                   })
                 } />&nbsp;
                 
-              I have read all Terms and Conditions 
+              I have read all Terms & Conditions 
                
             </label>
 
