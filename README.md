@@ -5,11 +5,11 @@
 
 Easy to use, and light weight library for form validations in React.
 
-## Motivation
+## Motivation 💪
 
 Before jumping to React, I was an Angular Developer. While I was learning React, I was like, "Oh!  Angular kind of validating forms is missing in React", and the result is this library.
 
-## What you can do
+## What you can do 🧐
 
 1) Instead of importing a wrapper component for each field, add validations to the traditional HTML fields itself.
 2) Basic validators like `required`, `email`, `maxLength`, `minLength`, and `pattern` can be applied.
@@ -17,12 +17,13 @@ Before jumping to React, I was an Angular Developer. While I was learning React,
 4) Changes uncontrolled inputs to controlled inputs internally, no need for explicitly chaining an `onchange` event. 
 5) Pass validation errors to the form to invalidate individual fields.
 
-## Installation
+## Installation 💻 
 ```
 npm install react-formsio --save
 ```
 
-## Usage
+## Usage 👨‍💻
+
 ### Adding Validation to the HTML text field!
 ```jsx
 import React from 'react';
@@ -66,7 +67,7 @@ const App = () => {
 export default App;
 ```
 
-## Example & Demo
+## Example & Demo 🧩
 
 
 [![React Formsio Demo GIF](images/react-formsio-demo.gif)](https://react-formsio.stackblitz.io)
@@ -75,15 +76,15 @@ export default App;
 ### [Live Demo](https://react-formsio.stackblitz.io)
 
 
-## More
+## More 📖 
 
 See the [API/Tutorial](/API.md) for more information.
 
-## Bug / Feature Request
+## Bug / Feature Request 📣
 
 If you find a bug or you'd like to request a new function, kindly open an issue [here](https://github.com/itzzmeakhi/react-formsio/issues/new). Please include your queries and their expected results.
 
 
-## License
+## License ©️
 
 MIT © [itzzmeakhi](https://github.com/itzzmeakhi)

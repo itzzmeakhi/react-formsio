@@ -34,7 +34,7 @@ const { register,
         validationRules,
         isFormValid } = useFormsio();
 ```
-* __register__ - It is a reference to register the input field with react-formsio.
+* __register__ - It is a reference method to register the input field with react-formsio.
 * __formState__ - It is an object that holds the state of form.
 * __validationRules__ - It is an object that holds all accepted validation rules for each input field.
 * __isFormValid__ - It holds the validity of form based on validation rules declared.
